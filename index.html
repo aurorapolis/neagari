@@ -5,104 +5,260 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ねあがりチラシ</title>
 <meta name="description" content="食品と日用品の値上げを、週に一度まとめます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho+B1:wght@700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper:#FBF9F4; --red:#E8342A; --blue:#1B3A8C;
-    --ink:#221F1C; --sub:#6E6863; --rule:#E0DACE; --tint:#F2EEE4;
+    --paper:#F1EBD9; --teal:#1C8792; --teal-d:#0F5C65; --red:#DE4527;
+    --ink:#2A2622; --sub:#7C7264; --line:#D6CDB6;
   }
   * { box-sizing:border-box; }
   body {
-    margin:0; background:var(--paper); color:var(--ink);
+    margin:0; color:var(--ink);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(90,70,40,.07) 1px, transparent 0) 0 0/6px 6px,
+      var(--paper);
     font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
     -webkit-text-size-adjust:100%;
   }
-  .bar-red { height:6px; background:var(--red); }
-  .bar-blue { height:2px; background:var(--blue); }
-  .wrap { max-width:560px; margin:0 auto; padding:20px 16px 56px; }
+  .min {
+    font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+    font-weight:800;
+  }
+  .dot {
+    font-family:"DotGothic16","Hiragino Kaku Gothic ProN",monospace; font-weight:400;
+    -webkit-font-smoothing:none;
+  }
+  .wrap { max-width:560px; margin:0 auto; padding:0 14px 62px; }
 
-  .head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
-  h1 { margin:0; font-size:30px; font-weight:900; letter-spacing:.04em; line-height:1; }
-  .upd { font-size:11px; color:var(--sub); white-space:nowrap; }
-  .lead { margin:8px 0 0; font-size:13px; color:var(--sub); line-height:1.7; }
+  /* ── 見出し ── */
+  .masthead {
+    position:relative; background:var(--teal); color:#fff; overflow:hidden;
+    margin:0 -14px; padding:24px 16px 14px; border-bottom:5px solid var(--ink);
+  }
+  .rays {
+    position:absolute; inset:-60% -30%; z-index:0; opacity:.85;
+    background:repeating-conic-gradient(from 0deg at 50% 42%,
+      rgba(255,255,255,.11) 0deg 5deg, rgba(255,255,255,0) 5deg 11deg);
+  }
+  h1 {
+    margin:0; position:relative; z-index:2;
+    font-size:clamp(30px,11vw,46px); line-height:1.08; letter-spacing:-.045em;
+    color:var(--red); transform-origin:left center;
+    transform:perspective(360px) rotateY(-17deg) rotate(-1.2deg);
+    -webkit-text-stroke:7px var(--paper);
+    paint-order:stroke fill;
+    text-shadow:5px 5px 0 rgba(0,0,0,.3);
+  }
+  .lead {
+    margin:18px 0 0; font-size:11.5px; font-weight:700; line-height:1.7;
+    position:relative; z-index:1;
+  }
+  .metarow {
+    display:flex; align-items:center; gap:12px;
+    margin-top:16px; position:relative; z-index:1;
+  }
+  .upd:empty { display:none; }
+  .upd {
+    display:inline-flex; align-items:center; justify-content:center;
+    background:var(--paper); color:var(--teal-d);
+    font-size:10px; padding:4px 9px; letter-spacing:.03em; flex:none;
+  }
+  .badge {
+    position:absolute; left:2px; top:3px; z-index:1;
+    width:28px; height:28px; border-radius:50%;
+    background:var(--red);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:9.5px; line-height:1.08; text-align:center;
+    letter-spacing:.02em;
+    box-shadow:
+      inset 0 0 0 1px var(--red),
+      inset 0 0 0 2px rgba(255,255,255,.9),
+      2px 2px 0 rgba(0,0,0,.2);
+  }
   .newbar {
-    margin-top:12px; display:inline-block; background:var(--red); color:#fff;
-    font-size:13px; font-weight:700; padding:6px 12px; border-radius:2px;
+    background:var(--red); color:#fff; margin:0 -14px;
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    padding:9px 16px; border-bottom:4px solid var(--ink);
   }
+  .nb-left { font-size:17px; letter-spacing:.06em; }
 
-  .cats { display:flex; gap:6px; flex-wrap:wrap; margin:20px 0; }
+  /* ── しぼりこみ ── */
+  .cats {
+    display:flex; gap:5px; flex-wrap:nowrap; margin:20px 0 26px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;
+  }
+  .cats::-webkit-scrollbar { display:none; }
   .cat {
-    font:inherit; font-size:13px; padding:6px 13px; border:1px solid var(--rule);
-    background:transparent; color:var(--sub); border-radius:999px; cursor:pointer;
+    font:inherit; font-size:12.5px; font-weight:800; padding:6px 11px;
+    flex:none; white-space:nowrap;
+    border:2px solid var(--teal); background:#fff; color:var(--teal-d);
+    cursor:pointer; box-shadow:3px 3px 0 rgba(42,38,34,.75);
   }
-  .cat.on { background:var(--blue); border-color:var(--blue); color:#fff; font-weight:700; }
-  .cat:focus-visible, .row:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+  .cat.on { background:var(--teal); color:#fff; }
+  .cat:active { transform:translate(3px,3px); box-shadow:none; }
+  .cat:focus-visible, .row:focus-visible { outline:3px solid var(--red); outline-offset:2px; }
 
+  /* ── 日付 ── */
   section { margin-bottom:26px; }
-  .daterow { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-  .chip {
-    background:var(--ink); color:#fff; font-size:15px; font-weight:800;
-    padding:3px 9px; letter-spacing:.02em;
+  .daterow {
+    display:flex; align-items:center; gap:11px;
+    background:var(--teal); color:#fff; padding:8px 12px;
   }
-  .chip.soon { background:var(--red); }
-  .when { font-size:12px; color:var(--sub); }
+  .daterow.soon { background:var(--red); }
+  .dnum { font-size:24px; line-height:1; letter-spacing:.01em; }
+  .dwd { font-size:12px; font-weight:800; opacity:.9; }
+  .when {
+    margin-left:auto; background:var(--paper); color:var(--ink);
+    font-size:12.5px; padding:3px 10px; letter-spacing:.03em;
+  }
 
-  .list { border-top:1px solid var(--rule); }
-  .item { border-bottom:1px solid var(--rule); }
+  /* ── 商品 ── */
+  .list { border:3px solid var(--ink); border-top:none; background:#FFFDF6; }
+  .item + .item { border-top:2px dashed var(--line); }
   .row {
-    font:inherit; width:100%; display:flex; align-items:center; gap:12px;
-    padding:12px 2px; background:none; border:none; text-align:left; cursor:pointer;
+    font:inherit; width:100%; display:flex; align-items:center; gap:10px;
+    padding:15px 12px; background:none; border:none; text-align:left;
   }
-  .name { display:block; font-size:16px; font-weight:700; line-height:1.4; }
-  .maker { display:block; font-size:12px; color:var(--sub); margin-top:2px; }
-  .rate { font-size:21px; font-weight:900; color:var(--red); white-space:nowrap; }
-  .rate.soft { color:var(--sub); }
-  .tag-new { font-size:10px; color:var(--red); font-weight:800; margin-left:6px; vertical-align:middle; }
+  .name { display:block; font-size:18px; font-weight:900; line-height:1.35; }
+  .maker { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:4px; }
+  .note { display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-top:6px; line-height:1.6; }
+  .srcline { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:5px; }
+  .srcline a { color:var(--teal-d); margin-left:8px; }
+  .rate {
+    background:var(--red); color:#fff; font-size:24px; padding:6px 12px;
+    white-space:nowrap; letter-spacing:.01em; box-shadow:3px 3px 0 rgba(42,38,34,.75);
+  }
+  .rate.soft {
+    background:#FFFDF6; color:var(--sub); border:2px dashed var(--sub);
+    font-size:17px; box-shadow:none;
+  }
+  .tag-new {
+    display:inline-block; background:var(--teal); color:#fff; font-size:11px;
+    padding:3px 8px; margin-left:7px; vertical-align:middle; letter-spacing:.06em;
+  }
   .tag-unsure {
-    font-size:10px; color:var(--sub); font-weight:700; margin-left:6px;
-    padding:1px 5px; border:1px solid var(--rule); border-radius:2px; vertical-align:middle;
+    display:inline-block; font-size:10px; font-weight:800; color:var(--sub);
+    border:1.5px solid var(--sub); padding:1px 6px; margin-left:7px; vertical-align:middle;
   }
-  .detail {
-    background:var(--tint); padding:10px 12px 12px; margin-bottom:10px;
-    font-size:13px; line-height:1.8;
-  }
-  .src { font-size:11px; color:var(--sub); margin-top:4px; }
-  .src a { color:var(--blue); }
 
-  .empty { font-size:14px; color:var(--sub); padding:40px 0; text-align:center; }
-  .foot { font-size:11px; color:var(--sub); margin-top:34px; line-height:1.9; text-align:center; }
-  .foot .box { padding:1px 5px; border:1px solid var(--rule); border-radius:2px; }
+  .empty { font-size:14px; font-weight:700; color:var(--sub); padding:46px 0; text-align:center; line-height:2; }
+  .foot {
+    font-size:13px; color:var(--sub); margin-top:34px; line-height:2.1;
+    text-align:center; border-top:3px double var(--line); padding-top:18px;
+  }
+  .foot .box { border:1.5px solid var(--sub); padding:2px 7px; font-weight:800; }
 </style>
 </head>
 <body>
 
-<div class="bar-red"></div>
-<div class="bar-blue"></div>
-
 <div class="wrap">
-  <header>
-    <div class="head">
-      <h1>ねあがりチラシ</h1>
-      <span class="upd" id="upd"></span>
-    </div>
-    <p class="lead">食品と日用品の値上げを、週に一度まとめます。</p>
-    <div id="newbar"></div>
+  <header class="masthead">
+    <div class="rays"></div>
+    <div class="badge min" id="badge">号<br>外</div>
+    <h1 class="min">ねあがりチラシ</h1>
+    <p class="lead dot" id="lead">食品と日用品の値上げを週に一度まとめます！</p>
   </header>
+  <div id="newbar"></div>
 
   <div class="cats" id="cats"></div>
   <div id="body"><p class="empty">読みこんでいます…</p></div>
 
   <p class="foot">
-    <span class="box">不確定</span> は、まだ正式に発表されていないものです。<br>
-    毎週月曜に更新しています。<br>
-    正確な価格は各社の発表をご確認ください。<br>
-    <span style="letter-spacing:.04em">© aurorapolis</span>
+    <span class="box">発表待ち</span> は、<br>
+    メーカーがまだ正式に発表していないものです。<br>
+    毎週月曜に更新するつもりです。（遅れたらすみません）<br>
+    正確な価格は各社の発表をご確認ください！<br><br>
+    <span class="min" style="letter-spacing:.08em">© aurorapolis</span>
   </p>
 </div>
 
 <script>
+/* ══ ドット絵をつくる部分 ══
+   16pxちょうどで文字を描き、にじみを消してから整数倍に拡大します。
+   こうしないと画面がなめらかに描いてしまい、粒が見えません。 */
+
+function dotCanvas(lines, rgb, gap){
+  const size = 16, lh = size + (gap == null ? 3 : gap);
+  const cv = document.createElement("canvas");
+  let cx = cv.getContext("2d");
+  cx.font = size + 'px "DotGothic16", monospace';
+  let w = 1;
+  lines.forEach(t => { w = Math.max(w, Math.ceil(cx.measureText(t).width)); });
+  cv.width = w;
+  cv.height = lh * lines.length;
+  cx = cv.getContext("2d");
+  cx.font = size + 'px "DotGothic16", monospace';
+  cx.textBaseline = "top";
+  cx.fillStyle = "#000";
+  lines.forEach((t, i) => cx.fillText(t, 0, i * lh + 1));
+  const img = cx.getImageData(0, 0, cv.width, cv.height), d = img.data;
+  for (let i = 0; i < d.length; i += 4){
+    if (d[i+3] > 100){ d[i]=rgb[0]; d[i+1]=rgb[1]; d[i+2]=rgb[2]; d[i+3]=255; }
+    else d[i+3] = 0;
+  }
+  cx.putImageData(img, 0, 0);
+
+  /* 上下の余った空白を切り落として、きっちり中心に置けるようにする */
+  let top = -1, bot = -1;
+  for (let y = 0; y < cv.height; y++){
+    let ink = false;
+    for (let x = 0; x < cv.width; x++){
+      if (d[(y * cv.width + x) * 4 + 3] === 255){ ink = true; break; }
+    }
+    if (ink){ if (top < 0) top = y; bot = y; }
+  }
+  if (top < 0) return cv;
+  const out = document.createElement("canvas");
+  out.width = cv.width;
+  out.height = bot - top + 1;
+  const ox = out.getContext("2d");
+  ox.imageSmoothingEnabled = false;
+  ox.drawImage(cv, 0, -top);
+  return out;
+}
+
+function mountDot(el, lines, rgb, avail, maxScale, gap){
+  if (!el) return;
+  try {
+    const cv = dotCanvas(lines, rgb, gap);
+    let sc = Math.floor(avail / cv.width);
+    sc = Math.max(1, Math.min(maxScale || 2, sc));
+    cv.style.width  = (cv.width  * sc) + "px";
+    cv.style.height = (cv.height * sc) + "px";
+    cv.style.imageRendering = "pixelated";
+    cv.style.display = "block";
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", lines.join(""));
+    el.innerHTML = "";
+    el.appendChild(cv);
+  } catch(e){}
+}
+
+const LEAD = ["食品と日用品の値上げを週に一度まとめます！"];
+let dotReady = false;
+
+function paintDots(){
+  const head = document.querySelector(".masthead");
+  const avail = head.clientWidth - 32;
+  mountDot(document.getElementById("lead"), LEAD, [255,255,255], avail, 1);
+  const u = document.getElementById("upd");
+  if (u && u.dataset.text){
+    mountDot(u, [u.dataset.text], [15,92,101], avail - 90, 1);
+  }
+}
+
+const DOTREADY = (document.fonts && document.fonts.load)
+  ? document.fonts.load('16px "DotGothic16"', "食品日用値上号外しらべ月日！")
+  : Promise.resolve();
+
+DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
+
+/* ══ ここから中身 ══ */
 const CATS = ["すべて","食品","飲料","日用品","その他"];
 const WD = ["日","月","火","水","木","金","土"];
-let DATA = null, CAT = "すべて", OPEN = null;
+let DATA = null, CAT = "すべて";
 
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c =>
   ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
@@ -134,12 +290,19 @@ function render(){
   const all = items();
 
   const u = parseDate(DATA && DATA.updated);
-  document.getElementById("upd").textContent =
-    u ? (u.getMonth()+1) + "月" + u.getDate() + "日 しらべ" : "";
-
+  const updText = u ? (u.getMonth()+1) + "月" + u.getDate() + "日 しらべ" : "";
   const n = all.filter(r => r.first_seen === (DATA && DATA.updated)).length;
+
   document.getElementById("newbar").innerHTML =
-    n > 0 ? '<div class="newbar">新しい値上げが ' + n + ' 件</div>' : "";
+    '<div class="newbar">'
+    + '<span class="nb-left min">'
+    + (n > 0 ? "新しい値上げ " + n + " 件" : "今週のねあがり")
+    + '</span><span class="upd dot" id="upd"></span></div>';
+
+  const updEl = document.getElementById("upd");
+  updEl.dataset.text = updText;
+  updEl.textContent = updText;
+  if (dotReady && updText) mountDot(updEl, [updText], [15,92,101], 150, 1);
 
   document.getElementById("cats").innerHTML = CATS.map(c =>
     '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
@@ -149,7 +312,7 @@ function render(){
   const body = document.getElementById("body");
 
   if (!shown.length){
-    body.innerHTML = '<p class="empty">このカテゴリの値上げは、いまのところありません。</p>';
+    body.innerHTML = '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>';
     return;
   }
 
@@ -162,31 +325,28 @@ function render(){
   let html = "";
   groups.forEach((rows, date) => {
     const d = parseDate(date), k = days(d);
-    html += '<section><div class="daterow">'
-      + '<span class="chip' + (k <= 7 ? " soon" : "") + '">'
-      + (d.getMonth()+1) + "/" + d.getDate() + '</span>'
-      + '<span class="when">' + WD[d.getDay()] + "曜　" + whenLabel(k) + '</span>'
+    html += '<section><div class="daterow' + (k <= 7 ? " soon" : "") + '">'
+      + '<span class="dnum min">' + (d.getMonth()+1) + "/" + d.getDate() + '</span>'
+      + '<span class="dwd">' + WD[d.getDay()] + '曜</span>'
+      + '<span class="when min">' + whenLabel(k) + '</span>'
       + '</div><div class="list">';
 
     rows.forEach((r, i) => {
-      const id = date + "-" + i;
       const isNew = r.first_seen === DATA.updated;
       const unsure = r.sure === false;
-      html += '<div class="item"><button class="row" data-id="' + id + '">'
+      html += '<div class="item"><div class="row">'
         + '<span style="flex:1;min-width:0">'
         + '<span class="name">' + esc(r.item)
-        + (isNew ? '<span class="tag-new">NEW</span>' : "")
-        + (unsure ? '<span class="tag-unsure">不確定</span>' : "")
-        + '</span><span class="maker">' + esc(r.maker) + '</span></span>'
-        + '<span class="rate' + (unsure ? " soft" : "") + '">'
-        + esc(r.rate) + (unsure ? "?" : "") + '</span></button>';
+        + (isNew ? '<span class="tag-new min">NEW</span>' : "")
+        + (unsure ? '<span class="tag-unsure">発表待ち</span>' : "")
+        + '</span><span class="maker">' + esc(r.maker) + '</span>'
+        + (r.note ? '<span class="note">' + esc(r.note) + '</span>' : "")
+        + '<span class="srcline">出典 ' + esc(r.src)
+        + (r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
+        + '</span></span>'
+        + '<span class="rate min' + (unsure ? " soft" : "") + '">'
+        + esc(r.rate) + (unsure ? "?" : "") + '</span></div>';
 
-      if (OPEN === id){
-        html += '<div class="detail">' + esc(r.note)
-          + '<div class="src">出典 ' + esc(r.src)
-          + (r.url ? '　<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
-          + '</div></div>';
-      }
       html += '</div>';
     });
     html += '</div></section>';
@@ -195,19 +355,47 @@ function render(){
 }
 
 document.addEventListener("click", e => {
+  if (e.target.closest("a")) return;
   const c = e.target.closest(".cat");
-  if (c){ CAT = c.dataset.cat; OPEN = null; render(); return; }
-  const r = e.target.closest(".row");
-  if (r){ OPEN = (OPEN === r.dataset.id) ? null : r.dataset.id; render(); }
+  if (c){ CAT = c.dataset.cat; render(); }
 });
+
+/* data.json が読めないときに使う予備データ（公開後は data.json が優先されます） */
+const EMBED = {
+  "updated": "2026-09-05",
+  "items": [
+    { "item":"コカ・コーラ", "maker":"コカ・コーラボトラーズ", "cat":"飲料",
+      "date":"2026-09-01", "rate":"+20円", "note":"165品目が対象",
+      "src":"暮らしの設備ガイド",
+      "url":"https://h-bid.jp/september-2026-price-increase-list/",
+      "first_seen":"2026-09-05" },
+    { "item":"発泡酒・新ジャンル", "maker":"各社（酒税改正）", "cat":"飲料",
+      "date":"2026-10-01", "rate":"+7.26円", "note":"350ml缶あたり",
+      "src":"プラスチックパレット",
+      "url":"https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen":"2026-09-05" },
+    { "item":"ゆうパック", "maker":"日本郵便", "cat":"その他",
+      "date":"2026-10-01", "rate":"+10%", "note":"140サイズ以上は約20%",
+      "src":"プラスチックパレット",
+      "url":"https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen":"2026-09-05" },
+    { "item":"洗たく洗剤", "maker":"ライオン", "cat":"日用品",
+      "date":"2026-10-01", "rate":"未定", "note":"上げ幅は未公表",
+      "src":"節約トレンドニュース",
+      "url":"https://papamamamoney.com/trend/2026-detergent-price/",
+      "first_seen":"2026-09-05", "sure": false },
+    { "item":"納豆・米菓", "maker":"各社", "cat":"食品",
+      "date":"2026-10-01", "rate":"+20%", "note":"報道による予測",
+      "src":"値上げレーダー",
+      "url":"https://neage-radar.com/monthly/2026-10",
+      "first_seen":"2026-09-05", "sure": false }
+  ]
+};
 
 fetch("data.json?" + Date.now())
   .then(r => r.ok ? r.json() : Promise.reject())
   .then(j => { DATA = j; render(); })
-  .catch(() => {
-    document.getElementById("body").innerHTML =
-      '<p class="empty">data.json が読みこめませんでした。<br>ファイルの書き方を確認してください。</p>';
-  });
+  .catch(() => { DATA = EMBED; render(); });
 </script>
 </body>
 </html>
