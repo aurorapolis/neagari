@@ -1,1 +1,62 @@
-
+{
+  "updated": "2026-09-05",
+  "items": [
+    {
+      "item": "コカ・コーラ",
+      "maker": "コカ・コーラボトラーズ",
+      "cat": "飲料",
+      "date": "2026-09-01",
+      "rate": "+20円",
+      "note": "165品目が対象",
+      "src": "暮らしの設備ガイド",
+      "url": "https://h-bid.jp/september-2026-price-increase-list/",
+      "first_seen": "2026-09-05"
+    },
+    {
+      "item": "発泡酒・新ジャンル",
+      "maker": "各社（酒税改正）",
+      "cat": "飲料",
+      "date": "2026-10-01",
+      "rate": "+7.26円",
+      "note": "350ml缶あたり",
+      "src": "プラスチックパレット",
+      "url": "https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen": "2026-09-05"
+    },
+    {
+      "item": "ゆうパック",
+      "maker": "日本郵便",
+      "cat": "その他",
+      "date": "2026-10-01",
+      "rate": "+10%",
+      "note": "140サイズ以上は約20%",
+      "src": "プラスチックパレット",
+      "url": "https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen": "2026-09-05"
+    },
+    {
+      "item": "洗たく洗剤",
+      "maker": "ライオン",
+      "cat": "日用品",
+      "date": "2026-10-01",
+      "rate": "未定",
+      "note": "上げ幅は未公表",
+      "src": "節約トレンドニュース",
+      "url": "https://papamamamoney.com/trend/2026-detergent-price/",
+      "first_seen": "2026-09-05",
+      "sure": false
+    },
+    {
+      "item": "納豆・米菓",
+      "maker": "各社",
+      "cat": "食品",
+      "date": "2026-10-01",
+      "rate": "+20%",
+      "note": "報道による予測",
+      "src": "値上げレーダー",
+      "url": "https://neage-radar.com/monthly/2026-10",
+      "first_seen": "2026-09-05",
+      "sure": false
+    }
+  ]
+}
