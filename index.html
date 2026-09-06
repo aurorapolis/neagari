@@ -149,6 +149,44 @@
     text-align:center; border-top:3px double var(--line); padding-top:18px;
   }
   .foot .box { border:1.5px solid var(--sub); padding:2px 7px; font-weight:800; }
+
+  /* ── ハートボタン ── */
+  #heart {
+    position:fixed; right:14px; bottom:14px; z-index:50;
+    width:52px; height:52px; border:3px solid var(--ink);
+    background:var(--paper); color:var(--red); font-size:24px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
+    font-family:inherit; padding:0;
+  }
+  #heart:active { transform:translate(3px,3px); box-shadow:none; }
+  #heart.pop { animation:heartPop .4s ease; }
+  @keyframes heartPop { 0%,100%{transform:scale(1);} 40%{transform:scale(1.35);} }
+
+  #thanks {
+    position:fixed; right:14px; bottom:76px; z-index:50;
+    display:none; align-items:flex-end; gap:12px;
+    opacity:0; transform:translateY(8px); transition:opacity .25s ease, transform .25s ease;
+  }
+  #thanks.show { display:flex; opacity:1; transform:translateY(0); }
+  #thanks .bubble { align-self:flex-start; }
+  #thanks img { width:76px; height:auto; image-rendering:pixelated; }
+  #thanks img.n { margin-left:-13px; }   /* ねあがりちゃんは絵の左に余白があるぶん寄せる */
+  #thanks .bubble {
+    background:var(--paper); border:3px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    padding:9px 12px; font-size:13px; font-weight:800; line-height:1.5;
+    max-width:190px; position:relative;
+  }
+  #thanks .chara { display:flex; flex-direction:column; align-items:center; gap:2px; }
+  #thanks .who {
+    font-size:10.5px; font-weight:800; color:var(--ink);
+    background:var(--paper); border:2px solid var(--ink);
+    padding:1px 6px; letter-spacing:.02em; white-space:nowrap;
+  }
+  #thanks .bubble::after {
+    content:""; position:absolute; right:-11px; top:16px;
+    border-left:11px solid var(--ink); border-top:9px solid transparent; border-bottom:9px solid transparent;
+  }
 </style>
 </head>
 <body>
@@ -158,7 +196,7 @@
     <div class="rays"></div>
     <div class="badge min" id="badge">号<br>外</div>
     <h1 class="min">ねあがりチラシ</h1>
-    <p class="lead dot" id="lead">食品と日用品の値上げを週に一度まとめます！</p>
+    <p class="lead dot" id="lead">食品と日用品の値上げをほぼだいたいたぶん毎日更新！</p>
   </header>
   <div id="newbar"></div>
 
@@ -168,10 +206,21 @@
   <p class="foot">
     <span class="box">発表待ち</span> は、<br>
     メーカーがまだ正式に発表していないものです。<br>
-    毎週月曜に更新するつもりです。（遅れたらすみません）<br>
     正確な価格は各社の発表をご確認ください！<br><br>
+    毎日って早いですよね。1週間も早い。<br>
+    だってもうなんか急に秋っぽい！<br><br>
+    最後まで見てくれてありがとうございました！<br><br>
     <span class="min" style="letter-spacing:.08em">© aurorapolis</span>
   </p>
+</div>
+
+<button id="heart" aria-label="ありがとう">&#9829;</button>
+<div id="thanks" aria-live="polite">
+  <div class="bubble"><span id="thanks-text"></span></div>
+  <div class="chara">
+    <img id="thanks-img" alt="">
+    <span class="who" id="thanks-who"></span>
+  </div>
 </div>
 
 <script>
@@ -236,7 +285,7 @@ function mountDot(el, lines, rgb, avail, maxScale, gap){
   } catch(e){}
 }
 
-const LEAD = ["食品と日用品の値上げを週に一度まとめます！"];
+const LEAD = ["食品と日用品の値上げを", "ほぼだいたいたぶん毎日更新！"];
 let dotReady = false;
 
 function paintDots(){
@@ -250,7 +299,7 @@ function paintDots(){
 }
 
 const DOTREADY = (document.fonts && document.fonts.load)
-  ? document.fonts.load('16px "DotGothic16"', "食品日用値上号外しらべ月日！")
+  ? document.fonts.load('16px "DotGothic16"', "食品日用値上号外しらべ月日毎更新ほだたぶん！")
   : Promise.resolve();
 
 DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
@@ -399,6 +448,63 @@ fetch("data.json?" + Date.now())
   .then(r => r.ok ? r.json() : Promise.reject())
   .then(j => { DATA = j; render(); })
   .catch(() => { DATA = EMBED; render(); });
+
+/* ── ハートボタン：押すとキャラがひとこと言う ── */
+(function(){
+  const NEAGARI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADiElEQVR42u2dPWsVQRSGcyWFCEmhIIhCIIWgSUAQBA0IKkRttBELC8GoINj4U2wEwU8sFCSNgRAVtBCCIChCEhULQYilFgmInXYX96hz9jhnPlafp1v2cmf2vpzz8s7O7u0NdIyd20e/1zSfN+8/9HKOt24AOgWCIRikpFfbhKwe9fLmhuD5t0tfTOPvGN8YPL97+mtRj6PCaImAYNBnsPYJSo9aP7kY/Py3hYms84n1OCqMlggIBn/vYanX5mQOiR0vtUflzpXWnEaF0RIBwaBPT/bYBzNXo77w+IkLrrkmFu+1xFhicxoVRksEBAM/DxsZtnnQ0sOT/Oo/MX7kfvD8rqnTVBgtERAMfs+gNUfF5rShfbcbx5u3jGS94M+njjWON92dTTre3smjjePXj+9QYbREQDBw8jDtfozMadLjrD25tGeV9jQqjJYICAbpcpjEe09GbqQndc2zqDBaIiAYtPew1B41dv1R43j53OHGsVx7S07u8agwWiIgGGTLYdr9r4+r4X12B+beBc973y+qDbknY/Teq+Dnh29dpsJoiYBg4ORhqVk9cynY87vmaXL+8vqsyLVcKoyWCAgG7T3M+rzXL7lC8az/HS13UWG0REAwaO9h3u/3876/JnOOxDu35R5P+/2pMFoiIBi0z2G5iV1bjF2LjB0vdc6kwmiJgGDQJ/l767UcpvX8Z0+vBM9vu3Yj6w+2cv5s8Pz+gxeD57W1Q3IYLREQDOrJYbHPl+X2qOj5KPsOrZ5FhdESAcGgnIdpyFwSuxan3b/S8L6/Zd2zQYXREgHBoDXF/wNT5jLNw7w9IRbrfGP3zFBhtERAMKgnh1l5vjBfdHz5nhEqDBAMwQAP+1Nu6drzZKlzIhVGSwQEg3o97NOeQ43jocpykBXv5+2oMFoiIBiU8zDrvsS15cWmp41NmMbT9uZre+G1+Wx98YQKAwRDMChD8efDZO7S0DxM8ywNzdOkh0k0T2NPBy0REAy6m8OsnhWbs2K/z5rT5PV55zQqjJYICAbpPCz3f2RqHuO9luj9+/CMMy0REAzqzWHeuatreOcyKoyWCAgGfh6WO3f9a1hzGRVGSwQEgz7m/QXeezSsWPcleqPt6bBi3QNChdESAcHAL4flXiu0PkOszc+6trfmfL3WtUYqjJYICAbpchj4Qg6jJQKCgZ+H5aZ2z/R+DwcVRksEBIPW/ABhchT3jBln9AAAAABJRU5ErkJggg==";
+  const TSUKI   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABkCAYAAAALxleYAAAByUlEQVR42u3dO07DQBSF4RjRUbADikQC8aizChbGUlJQsorUiIIiBRuBOlPEGnked8z3d4kixzo6+n019iTTZjCe7re/OZ//+j5Nkc7/agOBCxzFaO63XAfPcTx+nL3e718XHa+28zWcUgSOyA7PdXTq4NakzudwSoHAB+K6trN7O1rDBQ6Bc/h6nL10rUXDKQUCH8nha5+zW9/z1HBKETh6zuHWRjRc4BB4XIfn3pP8OX1mfeHd9kXDIXCBo9EcPvrc3Xv9W8MFLnD0dPjoc3Xp58c1nFIgcIELHAIXOErM4aX3Tc5xc/t49vr5YXdxbm59PA2nFAh8JIenb9R2XurY3sdLr2H2aVIKBD6yw9P14rU9S9h7fVzDKUXgKOnwdO5svbYSjdpzuYZTisBRkGnOYf9tT8/cXL7U6RpOKQIHh8dxeq7jNZxSBI6WDk+p7fRcZ0b77VoNpxSBo6fDo83lo99jTc9fwylF4Ojp8GhzcHRnazilCBw9Hc7py5ydro9rOKUIHD0dXtrpo/3u4dLnVjScUgSOSA7PdXrK++EtlMNLP4ei4ZQicIzk8NKOn6P2vkt7fCgFAufwfteA1v+1puGUInA05A9dBY9fXu5/fAAAAABJRU5ErkJggg==";
+  const N = "ねあがりちゃん", T = "月ちゃん";
+  const LINES = [
+    [NEAGARI, N, "ありがとう！"],
+    [NEAGARI, N, "また来てね。"],
+    [NEAGARI, N, "うれしい！"],
+    [NEAGARI, N, "開発者もよろこぶ！"],
+    [NEAGARI, N, "開発者に伝えます！"],
+    [TSUKI, T, "毎日おつかれさまです"],
+    [TSUKI, T, "毎日ごくろうさまです"],
+    [TSUKI, T, "今日もおつかれさまです"],
+    [TSUKI, T, "ごくろうさまです"],
+    [TSUKI, T, "ありがとうございました"],
+    [TSUKI, T, "あたたかくしてください"]
+  ];
+  const btn = document.getElementById("heart");
+  const box = document.getElementById("thanks");
+  const txt = document.getElementById("thanks-text");
+  const who = document.getElementById("thanks-who");
+  const img = document.getElementById("thanks-img");
+  if (!btn) return;
+
+  const FIRST_KEY = "neagari-heart-first";
+  let firstDone = false;
+  try { firstDone = localStorage.getItem(FIRST_KEY) === "1"; } catch(e) {}
+
+  let timer = null, last = -1;
+  btn.addEventListener("click", () => {
+    let pick;
+    if (!firstDone){
+      // はじめて押したときだけ、決まったひとこと
+      const isN = Math.random() < 0.5;
+      pick = isN
+        ? [NEAGARI, N, "このハートは遊びです！特に意味はなし！"]
+        : [TSUKI,   T, "このハートは遊びです。意味はないんです。"];
+      firstDone = true;
+      try { localStorage.setItem(FIRST_KEY, "1"); } catch(e) {}
+    } else {
+      let i = Math.floor(Math.random() * LINES.length);
+      if (i === last) i = (i + 1) % LINES.length;
+      last = i;
+      pick = LINES[i];
+    }
+    img.src = pick[0];
+    img.className = (pick[0] === NEAGARI) ? "n" : "";
+    who.textContent = pick[1];
+    txt.textContent = pick[2];
+    box.classList.add("show");
+    btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
+    clearTimeout(timer);
+    timer = setTimeout(() => box.classList.remove("show"), 3200);
+  });
+})();
 </script>
 </body>
 </html>
