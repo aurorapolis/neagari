@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ねあがりチラシ</title>
 <meta name="description" content="食品と日用品の値上げを、週に一度まとめます。">
-<meta name="theme-color" content="#1C8792">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-512.png">
-<link rel="icon" href="icon-a.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho+B1:wght@700;800&display=swap" rel="stylesheet">
@@ -326,6 +322,8 @@ function render(){
     groups.get(r.date).push(r);
   });
 
+  const seenUrl = {};        // 同じ記事へのリンクは最初の1回だけ出す
+
   let html = "";
   groups.forEach((rows, date) => {
     const d = parseDate(date), k = days(d);
@@ -346,11 +344,12 @@ function render(){
         + '</span><span class="maker">' + esc(r.maker) + '</span>'
         + (r.note ? '<span class="note">' + esc(r.note) + '</span>' : "")
         + '<span class="srcline">出典 ' + esc(r.src)
-        + (r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
+        + (r.url && !seenUrl[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
         + '</span></span>'
         + '<span class="rate min' + (unsure ? " soft" : "") + '">'
         + esc(r.rate) + (unsure ? "?" : "") + '</span></div>';
 
+      if (r.url) seenUrl[r.url] = true;
       html += '</div>';
     });
     html += '</div></section>';
