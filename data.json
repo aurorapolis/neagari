@@ -1,49 +1,87 @@
 {
-  "updated": "2026-09-05",
+  "updated": "2026-09-06",
   "items": [
-    {
-      "item": "コカ・コーラ",
-      "maker": "コカ・コーラボトラーズ",
-      "cat": "飲料",
-      "date": "2026-09-01",
-      "rate": "+20円",
-      "note": "165品目が対象",
-      "src": "暮らしの設備ガイド",
-      "url": "https://h-bid.jp/september-2026-price-increase-list/",
-      "first_seen": "2026-09-05"
-    },
     {
       "item": "発泡酒・新ジャンル",
       "maker": "各社（酒税改正）",
       "cat": "飲料",
       "date": "2026-10-01",
       "rate": "+7.26円",
-      "note": "350ml缶あたり",
+      "note": "350ml缶あたり。ビールは下がる",
       "src": "プラスチックパレット",
       "url": "https://plastic-pallet.co.jp/price-hike-list-2026-october/",
-      "first_seen": "2026-09-05"
+      "first_seen": "2026-09-06"
     },
     {
-      "item": "ゆうパック",
-      "maker": "日本郵便",
-      "cat": "その他",
+      "item": "調味料",
+      "maker": "各社",
+      "cat": "食品",
       "date": "2026-10-01",
-      "rate": "+10%",
-      "note": "140サイズ以上は約20%",
-      "src": "プラスチックパレット",
-      "url": "https://plastic-pallet.co.jp/price-hike-list-2026-october/",
-      "first_seen": "2026-09-05"
+      "rate": "+25%",
+      "note": "最大の改定率。商品ごとに差",
+      "src": "節約トレンドニュース",
+      "url": "https://papamamamoney.com/trend/2026-october-price-increase/",
+      "first_seen": "2026-09-06",
+      "sure": false
     },
     {
-      "item": "洗たく洗剤",
-      "maker": "ライオン",
-      "cat": "日用品",
+      "item": "清涼飲料",
+      "maker": "各社",
+      "cat": "飲料",
+      "date": "2026-10-01",
+      "rate": "+18%",
+      "note": "最大の改定率。商品ごとに差",
+      "src": "節約トレンドニュース",
+      "url": "https://papamamamoney.com/trend/2026-october-price-increase/",
+      "first_seen": "2026-09-06",
+      "sure": false
+    },
+    {
+      "item": "冷凍食品",
+      "maker": "味の素冷凍食品",
+      "cat": "食品",
       "date": "2026-10-01",
       "rate": "未定",
-      "note": "上げ幅は未公表",
-      "src": "節約トレンドニュース",
-      "url": "https://papamamamoney.com/trend/2026-detergent-price/",
-      "first_seen": "2026-09-05",
+      "note": "価格改定を発表。率は未確認",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/04/163652",
+      "first_seen": "2026-09-06",
+      "sure": false
+    },
+    {
+      "item": "スナック菓子",
+      "maker": "湖池屋",
+      "cat": "食品",
+      "date": "2026-10-01",
+      "rate": "未定",
+      "note": "価格改定を発表。率は未確認",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/04/163652",
+      "first_seen": "2026-09-06",
+      "sure": false
+    },
+    {
+      "item": "菓子・加工食品",
+      "maker": "江崎グリコ",
+      "cat": "食品",
+      "date": "2026-10-01",
+      "rate": "未定",
+      "note": "価格改定を発表。率は未確認",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/04/163652",
+      "first_seen": "2026-09-06",
+      "sure": false
+    },
+    {
+      "item": "紙おむつ",
+      "maker": "各社",
+      "cat": "日用品",
+      "date": "2026-10-01",
+      "rate": "+150円",
+      "note": "1パックあたりの記事の試算値",
+      "src": "家族ラボ",
+      "url": "https://kazokulab.com/guides/2026-10gatsu-neage-ichiran/",
+      "first_seen": "2026-09-06",
       "sure": false
     },
     {
@@ -52,10 +90,10 @@
       "cat": "食品",
       "date": "2026-10-01",
       "rate": "+20%",
-      "note": "報道による予測",
+      "note": "報道による予測。公式発表はまだ",
       "src": "値上げレーダー",
       "url": "https://neage-radar.com/monthly/2026-10",
-      "first_seen": "2026-09-05",
+      "first_seen": "2026-09-06",
       "sure": false
     }
   ]
