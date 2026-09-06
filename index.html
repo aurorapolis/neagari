@@ -78,9 +78,14 @@
       2px 2px 0 rgba(0,0,0,.2);
   }
   .newbar {
+    position:relative;
     background:var(--red); color:#fff; margin:0 -14px;
     display:flex; align-items:center; justify-content:center; gap:12px;
-    padding:9px 16px; border-bottom:4px solid var(--ink);
+    padding:9px 64px 9px 16px; border-bottom:4px solid var(--ink);
+  }
+  .bar-chara {
+    position:absolute; right:6px; bottom:0; width:56px; height:auto;
+    image-rendering:pixelated; pointer-events:none;
   }
   .nb-left { font-size:17px; letter-spacing:.06em; }
 
@@ -124,6 +129,12 @@
   .name { display:block; font-size:18px; font-weight:900; line-height:1.35; }
   .maker { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:4px; }
   .note { display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-top:6px; line-height:1.6; }
+  .ex {
+    display:block; font-size:12.5px; font-weight:600; line-height:1.65;
+    background:#EAF3F0; border-left:4px solid var(--teal);
+    padding:5px 8px; margin-top:7px;
+  }
+  .ex b { font-weight:800; color:var(--teal-d); margin-right:5px; }
   .srcline { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:5px; }
   .srcline a { color:var(--teal-d); margin-left:8px; }
   .rate {
@@ -149,6 +160,11 @@
     text-align:center; border-top:3px double var(--line); padding-top:18px;
   }
   .foot .box { border:1.5px solid var(--sub); padding:2px 7px; font-weight:800; }
+  .foot { position:relative; }
+  .foot-chara {
+    position:absolute; left:26px; bottom:-30px; width:56px; height:auto;
+    image-rendering:pixelated; pointer-events:none;
+  }
 
   /* ── ハートボタン ── */
   #heart {
@@ -211,6 +227,7 @@
     だってもうなんか急に秋っぽい！<br><br>
     最後まで見てくれてありがとうございました！<br><br>
     <span class="min" style="letter-spacing:.08em">© aurorapolis</span>
+    <img class="foot-chara" id="foot-moon" alt="">
   </p>
 </div>
 
@@ -305,6 +322,7 @@ const DOTREADY = (document.fonts && document.fonts.load)
 DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
 
 /* ══ ここから中身 ══ */
+const CHARA_BAR = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADfklEQVR42u2dz4dWURjH75sZErUoRYqXN0q9M0REXloUaUhtWrVIP0S06Q/oj2gT0S+1aMhsJpGiFjEzRInpBy1iKBG16CXRonav7kPnuU/nOefeO/P57K57Z86Z+/V8v55zz73TKVrGru29302az9v3Hzo5x1tVQKtAMASDlHSaNiFrRr24uSZ4/t3rb6bxd06sD57fc+ZHrRlHhWGJgGAwYqzpE5QZtXqwGLz+59xk1vnEZhwVhiUCgsH/Z1jqtTnZh8SOlzqjcveV1j6NCsMSAcFgREd67OzM1ahfeOz4ede+JhbvtcRYYvs0KgxLBASDdBmmMZw/xV3/i4nD94Lndx86SYVhiYBgUDHDNLwzbtPmbtY/+OuJo6XjDXfvJx1v32CqdPzq8R3Tz5NhWCIgGPyTMe15jMw461qhZGHuYa2ZVXemUWFYIiAY+GWYdoH3nozcyExqW2ZRYVgiIBhUz7DUa4tfPi+VjuVaolx7S07u8agwLBEQDLL1Yan3eMQ+L2o68nlWb/pl8Pp1ty5TYVgiIBg4ZVgs1udn0vNlpo13B6Xj/o5tSTPQOp6c//fTF6PGl2u5VBiWCAgG1TMsdg+H5skSbS1TZkhqUo+n9V1UGJYICAbVMyz3N2zBdv+pMCwREAyq92FgI3btkArDEgHBoDKN/279g+548Pqt125knd/Hc2eD5/cfuBA8r60d0odhiYBgsHz6MGtGyT0VVrQ9Iep8lH2H1syiwrBEQDBob4bFovVxR5Z+JR3fumeDCsMSAcFg+WRYbF+Vejzr86/YPTNUGJYICAbt7cO8v7e4YLy+f/0RFQYIhmBAhhVFob8P9mnvwVbdUO+1QyoMSwQEg/b0YVpm1d0HWfF+344KwxIBwSBdhsV+135tf9J1Ps+eXgme1/bCS4ZvFkvHW54/ocIAwRAM6sH9/TCZYdbvF/aMe9OtmaWhZZrMMImWaezpwBIBwaC5fZg3MjNknxabWVoGWvs0uRbq3adRYVgiIBg0N8O0PsfaN3mvJXr3qbzjjCUCgkFzM2zjpdsr+gZ792VUGJYICAZ+GRa7h2OlY+3LqDAsERAMRpj3F9T9Ppf3vkUr1rVODeseECoMSwQEA78+LPc7yNZ3iLX5Wdf2hs5/r3WtkQrDEgHBIF0fBr7Qh2GJgGDgl2G5aXpm5v6/11QYlggIBiP+AHPZ/0NjFbaBAAAAAElFTkSuQmCC";
 const CATS = ["すべて","食品","飲料","日用品","その他"];
 const WD = ["日","月","火","水","木","金","土"];
 let DATA = null, CAT = "すべて";
@@ -346,7 +364,8 @@ function render(){
     '<div class="newbar">'
     + '<span class="nb-left min">'
     + (n > 0 ? "新しい値上げ " + n + " 件" : "今週のねあがり")
-    + '</span><span class="upd dot" id="upd"></span></div>';
+    + '</span><span class="upd dot" id="upd"></span>'
+    + '<img class="bar-chara" src="' + CHARA_BAR + '" alt=""></div>';
 
   const updEl = document.getElementById("upd");
   updEl.dataset.text = updText;
@@ -392,6 +411,7 @@ function render(){
         + (unsure ? '<span class="tag-unsure">発表待ち</span>' : "")
         + '</span><span class="maker">' + esc(r.maker) + '</span>'
         + (r.note ? '<span class="note">' + esc(r.note) + '</span>' : "")
+        + (r.ex ? '<span class="ex"><b>例</b>' + esc(r.ex) + '</span>' : "")
         + '<span class="srcline">出典 ' + esc(r.src)
         + (r.url && !seenUrl[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
         + '</span></span>'
@@ -472,6 +492,9 @@ fetch("data.json?" + Date.now())
   const txt = document.getElementById("thanks-text");
   const who = document.getElementById("thanks-who");
   const img = document.getElementById("thanks-img");
+  const fm = document.getElementById("foot-moon");
+  if (fm) fm.src = TSUKI;
+
   if (!btn) return;
 
   const FIRST_KEY = "neagari-heart-first";
