@@ -154,20 +154,6 @@
     border:1.5px solid var(--sub); padding:1px 6px; margin-left:7px; vertical-align:middle;
   }
 
-  .arch-head {
-    margin:36px 0 10px; font-size:14px; font-weight:800; color:var(--sub);
-    border-bottom:2px solid var(--line); padding-bottom:6px;
-  }
-  .arch-head span { font-weight:700; font-size:11.5px; margin-left:8px; }
-  .arch { border:2px solid var(--line); background:#FBF8EE; }
-  .arch-row {
-    display:flex; align-items:center; gap:10px; padding:10px 12px;
-  }
-  .arch-row + .arch-row { border-top:1px dashed var(--line); }
-  .arch-date { font-size:12.5px; font-weight:700; color:var(--sub); white-space:nowrap; }
-  .arch-name { flex:1; min-width:0; font-size:15px; font-weight:800; }
-  .arch-maker { display:block; font-size:11px; font-weight:700; color:var(--sub); margin-top:2px; }
-  .arch-rate { font-size:16px; font-weight:800; color:var(--sub); white-space:nowrap; }
   .empty { font-size:14px; font-weight:700; color:var(--sub); padding:46px 0; text-align:center; line-height:2; }
   .foot {
     font-size:13px; color:var(--sub); margin-top:34px; line-height:2.1;
@@ -363,7 +349,7 @@ function items(){
   if (!DATA) return [];
   return (DATA.items || [])
     .map(r => Object.assign({}, r, { d: parseDate(r.date) }))
-    .filter(r => r.d && r.item && days(r.d) >= -31)
+    .filter(r => r.d && r.item && days(r.d) >= -7)
     .sort((a,b) => a.d - b.d);
 }
 
@@ -390,30 +376,11 @@ function render(){
     '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
   ).join("");
 
-  const inCat = all.filter(r => CAT === "すべて" || r.cat === CAT);
-  const shown = inCat.filter(r => days(r.d) >= -7);
-  const past  = inCat.filter(r => days(r.d) < -7).sort((a,b) => b.d - a.d);
+  const shown = all.filter(r => CAT === "すべて" || r.cat === CAT);
   const body = document.getElementById("body");
 
-  function archiveHtml(){
-    if (!past.length) return "";
-    let h = '<div class="arch-head">もう上がりました<span>この1か月</span></div><div class="arch">';
-    past.forEach(r => {
-      h += '<div class="arch-row">'
-         + '<span class="arch-date">' + (r.d.getMonth()+1) + '/' + r.d.getDate() + '</span>'
-         + '<span class="arch-name">' + esc(r.item)
-         + '<span class="arch-maker">' + esc(r.maker) + '</span></span>'
-         + '<span class="arch-rate">' + esc(r.rate) + '</span></div>';
-    });
-    return h + '</div>';
-  }
-
-  if (!shown.length && !past.length){
-    body.innerHTML = '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>';
-    return;
-  }
   if (!shown.length){
-    body.innerHTML = '<p class="empty">これから上がるものは<br>いまのところありません。</p>' + archiveHtml();
+    body.innerHTML = '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>';
     return;
   }
 
@@ -456,7 +423,7 @@ function render(){
     });
     html += '</div></section>';
   });
-  body.innerHTML = html + archiveHtml();
+  body.innerHTML = html;
 }
 
 document.addEventListener("click", e => {
