@@ -489,4 +489,78 @@ const EMBED = {
       "src":"節約トレンドニュース",
       "url":"https://papamamamoney.com/trend/2026-detergent-price/",
       "first_seen":"2026-09-05", "sure": false },
-    
+    { "item":"納豆・米菓", "maker":"各社", "cat":"食品",
+      "date":"2026-10-01", "rate":"+20%", "note":"報道による予測",
+      "src":"値上げレーダー",
+      "url":"https://neage-radar.com/monthly/2026-10",
+      "first_seen":"2026-09-05", "sure": false }
+  ]
+};
+
+fetch("data.json?" + Date.now())
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(j => { DATA = j; render(); })
+  .catch(() => { DATA = EMBED; render(); });
+
+/* ── ハートボタン：押すとキャラがひとこと言う ── */
+(function(){
+  const NEAGARI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADiElEQVR42u2dPWsVQRSGcyWFCEmhIIhCIIWgSUAQBA0IKkRttBELC8GoINj4U2wEwU8sFCSNgRAVtBCCIChCEhULQYilFgmInXYX96hz9jhnPlafp1v2cmf2vpzz8s7O7u0NdIyd20e/1zSfN+8/9HKOt24AOgWCIRikpFfbhKwe9fLmhuD5t0tfTOPvGN8YPL97+mtRj6PCaImAYNBnsPYJSo9aP7kY/Py3hYms84n1OCqMlggIBn/vYanX5mQOiR0vtUflzpXWnEaF0RIBwaBPT/bYBzNXo77w+IkLrrkmFu+1xFhicxoVRksEBAM/DxsZtnnQ0sOT/Oo/MX7kfvD8rqnTVBgtERAMfs+gNUfF5rShfbcbx5u3jGS94M+njjWON92dTTre3smjjePXj+9QYbREQDBw8jDtfozMadLjrD25tGeV9jQqjJYICAbpcpjEe09GbqQndc2zqDBaIiAYtPew1B41dv1R43j53OHGsVx7S07u8agwWiIgGGTLYdr9r4+r4X12B+beBc973y+qDbknY/Teq+Dnh29dpsJoiYBg4ORhqVk9cynY87vmaXL+8vqsyLVcKoyWCAgG7T3M+rzXL7lC8az/HS13UWG0REAwaO9h3u/3876/JnOOxDu35R5P+/2pMFoiIBi0z2G5iV1bjF2LjB0vdc6kwmiJgGDQJ/l767UcpvX8Z0+vBM9vu3Yj6w+2cv5s8Pz+gxeD57W1Q3IYLREQDOrJYbHPl+X2qOj5KPsOrZ5FhdESAcGgnIdpyFwSuxan3b/S8L6/Zd2zQYXREgHBoDXF/wNT5jLNw7w9IRbrfGP3zFBhtERAMKgnh1l5vjBfdHz5nhEqDBAMwQAP+1Nu6drzZKlzIhVGSwQEg3o97NOeQ43jocpykBXv5+2oMFoiIBiU8zDrvsS15cWmp41NmMbT9uZre+G1+Wx98YQKAwRDMChD8efDZO7S0DxM8ywNzdOkh0k0T2NPBy0REAy6m8OsnhWbs2K/z5rT5PV55zQqjJYICAbpPCz3f2RqHuO9luj9+/CMMy0REAzqzWHeuatreOcyKoyWCAgGfh6WO3f9a1hzGRVGSwQEgz7m/QXeezSsWPcleqPt6bBi3QNChdESAcHAL4flXiu0PkOszc+6trfmfL3WtUYqjJYICAbpchj4Qg6jJQKCgZ+H5aZ2z/R+DwcVRksEBIPW/ABhchT3jBln9AAAAABJRU5ErkJggg==";
+  const TSUKI   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABkCAYAAAALxleYAAAByUlEQVR42u3dO07DQBSF4RjRUbADikQC8aizChbGUlJQsorUiIIiBRuBOlPEGnked8z3d4kixzo6+n019iTTZjCe7re/OZ//+j5Nkc7/agOBCxzFaO63XAfPcTx+nL3e718XHa+28zWcUgSOyA7PdXTq4NakzudwSoHAB+K6trN7O1rDBQ6Bc/h6nL10rUXDKQUCH8nha5+zW9/z1HBKETh6zuHWRjRc4BB4XIfn3pP8OX1mfeHd9kXDIXCBo9EcPvrc3Xv9W8MFLnD0dPjoc3Xp58c1nFIgcIELHAIXOErM4aX3Tc5xc/t49vr5YXdxbm59PA2nFAh8JIenb9R2XurY3sdLr2H2aVIKBD6yw9P14rU9S9h7fVzDKUXgKOnwdO5svbYSjdpzuYZTisBRkGnOYf9tT8/cXL7U6RpOKQIHh8dxeq7jNZxSBI6WDk+p7fRcZ0b77VoNpxSBo6fDo83lo99jTc9fwylF4Ojp8GhzcHRnazilCBw9Hc7py5ydro9rOKUIHD0dXtrpo/3u4dLnVjScUgSOSA7PdXrK++EtlMNLP4ei4ZQicIzk8NKOn6P2vkt7fCgFAufwfteA1v+1puGUInA05A9dBY9fXu5/fAAAAABJRU5ErkJggg==";
+  const N = "ねあがりちゃん", T = "月ちゃん";
+  const LINES = [
+    [NEAGARI, N, "ありがとう！"],
+    [NEAGARI, N, "また来てね。"],
+    [NEAGARI, N, "うれしい！"],
+    [NEAGARI, N, "開発者もよろこぶ！"],
+    [NEAGARI, N, "開発者に伝えます！"],
+    [TSUKI, T, "毎日おつかれさまです"],
+    [TSUKI, T, "毎日ごくろうさまです"],
+    [TSUKI, T, "今日もおつかれさまです"],
+    [TSUKI, T, "ごくろうさまです"],
+    [TSUKI, T, "ありがとうございました"],
+    [TSUKI, T, "あたたかくしてください"]
+  ];
+  const btn = document.getElementById("heart");
+  const box = document.getElementById("thanks");
+  const txt = document.getElementById("thanks-text");
+  const who = document.getElementById("thanks-who");
+  const img = document.getElementById("thanks-img");
+  const fm = document.getElementById("foot-moon");
+  if (fm) fm.src = TSUKI;
+
+  if (!btn) return;
+
+  const FIRST_KEY = "neagari-heart-first";
+  let firstDone = false;
+  try { firstDone = localStorage.getItem(FIRST_KEY) === "1"; } catch(e) {}
+
+  let timer = null, last = -1;
+  btn.addEventListener("click", () => {
+    let pick;
+    if (!firstDone){
+      // はじめて押したときだけ、決まったひとこと
+      const isN = Math.random() < 0.5;
+      pick = isN
+        ? [NEAGARI, N, "このハートは遊びです！特に意味はなし！"]
+        : [TSUKI,   T, "このハートは遊びです。意味はないんです。"];
+      firstDone = true;
+      try { localStorage.setItem(FIRST_KEY, "1"); } catch(e) {}
+    } else {
+      let i = Math.floor(Math.random() * LINES.length);
+      if (i === last) i = (i + 1) % LINES.length;
+      last = i;
+      pick = LINES[i];
+    }
+    img.src = pick[0];
+    img.className = (pick[0] === NEAGARI) ? "n" : "";
+    who.textContent = pick[1];
+    txt.textContent = pick[2];
+    box.classList.add("show");
+    btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
+    clearTimeout(timer);
+    timer = setTimeout(() => box.classList.remove("show"), 3200);
+  });
+})();
+</script>
+</body>
+</html>
