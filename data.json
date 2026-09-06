@@ -103,6 +103,18 @@
       "url": "https://kurashicostlab.com/guides/neage-ichiran-10gatsu-2026/",
       "first_seen": "2026-09-06",
       "sure": false
+    },
+    {
+      "item": "コカ・コーラ",
+      "maker": "コカ・コーラボトラーズ",
+      "cat": "飲料",
+      "date": "2026-09-01",
+      "rate": "+20円",
+      "note": "165品目が対象",
+      "ex": "",
+      "src": "暮らしの設備ガイド",
+      "url": "https://h-bid.jp/september-2026-price-increase-list/",
+      "first_seen": "2026-09-05"
     }
   ]
 }
