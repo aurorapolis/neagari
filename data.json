@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-06",
+  "updated": "2026-09-07",
   "items": [
     {
       "item": "発泡酒・新ジャンル",
@@ -115,6 +115,84 @@
       "src": "暮らしの設備ガイド",
       "url": "https://h-bid.jp/september-2026-price-increase-list/",
       "first_seen": "2026-09-05"
+    },
+    {
+      "item": "三ツ矢・カルピス",
+      "maker": "アサヒ飲料",
+      "cat": "飲料",
+      "date": "2026-11-01",
+      "rate": "未定",
+      "note": "ペットボトル飲料が対象",
+      "ex": "三ツ矢サイダー、カルピス",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/05/143657",
+      "first_seen": "2026-09-07",
+      "sure": false
+    },
+    {
+      "item": "伊右衛門など",
+      "maker": "サントリー",
+      "cat": "飲料",
+      "date": "2026-11-01",
+      "rate": "未定",
+      "note": "ペットボトル飲料が対象",
+      "ex": "伊右衛門",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/05/143657",
+      "first_seen": "2026-09-07",
+      "sure": false
+    },
+    {
+      "item": "コーヒー",
+      "maker": "UCC",
+      "cat": "飲料",
+      "date": "2026-11-01",
+      "rate": "未定",
+      "note": "缶コーヒーなどが対象",
+      "ex": "",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/05/143657",
+      "first_seen": "2026-09-07",
+      "sure": false
+    },
+    {
+      "item": "コーヒー・菓子",
+      "maker": "ネスレ日本",
+      "cat": "飲料",
+      "date": "2026-11-01",
+      "rate": "未定",
+      "note": "率は公式発表を要確認",
+      "ex": "",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/05/143657",
+      "first_seen": "2026-09-07",
+      "sure": false
+    },
+    {
+      "item": "サプリメント",
+      "maker": "江崎グリコ",
+      "cat": "その他",
+      "date": "2026-11-01",
+      "rate": "未定",
+      "note": "率は公式発表を要確認",
+      "ex": "",
+      "src": "値上げまとめサイト",
+      "url": "https://neage.hateblo.jp/entry/2026/07/05/143657",
+      "first_seen": "2026-09-07",
+      "sure": false
+    },
+    {
+      "item": "小麦・納豆",
+      "maker": "各社",
+      "cat": "食品",
+      "date": "2026-11-01",
+      "rate": "+100%",
+      "note": "11月で最大の幅。予測を含む",
+      "ex": "小麦粉、納豆、ベビーフード",
+      "src": "値上げレーダー",
+      "url": "https://neage-radar.com/monthly/2026-11",
+      "first_seen": "2026-09-07",
+      "sure": false
     }
   ]
 }
