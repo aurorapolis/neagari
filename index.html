@@ -360,7 +360,7 @@ function whenLabel(n){
 
 function exHtml(t){
   // 末尾の「ほかにもあり！」だけ色を変える
-  const m = String(t).match(/^(.*?)[、,]?\s*(ほかにもあり！?)$/);
+  const m = String(t).match(/^(.*?)[、,]?\s*(ほか(?:にもあり！?|[0-9０-９]+品目))$/);
   if (m) return esc(m[1]) + '　<i>' + esc(m[2]) + '</i>';
   return esc(t);
 }
