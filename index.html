@@ -135,6 +135,7 @@
     padding:5px 8px; margin-top:7px;
   }
   .ex b { font-weight:800; color:var(--teal-d); margin-right:5px; }
+  .ex i { font-style:normal; font-weight:800; color:var(--teal-d); }
   .srcline { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:5px; }
   .srcline a { color:var(--teal-d); margin-left:8px; }
   .rate {
@@ -357,6 +358,13 @@ function whenLabel(n){
   return "あと" + n + "日";
 }
 
+function exHtml(t){
+  // 末尾の「ほかにもあり！」だけ色を変える
+  const m = String(t).match(/^(.*?)[、,]?\s*(ほかにもあり！?)$/);
+  if (m) return esc(m[1]) + '　<i>' + esc(m[2]) + '</i>';
+  return esc(t);
+}
+
 function items(){
   if (!DATA) return [];
   return (DATA.items || [])
@@ -440,7 +448,7 @@ function render(){
         + (unsure ? '<span class="tag-unsure">発表待ち</span>' : "")
         + '</span><span class="maker">' + esc(r.maker) + '</span>'
         + (r.note ? '<span class="note">' + esc(r.note) + '</span>' : "")
-        + (r.ex ? '<span class="ex"><b>例</b>' + esc(r.ex) + '</span>' : "")
+        + (r.ex ? '<span class="ex"><b>例</b>' + exHtml(r.ex) + '</span>' : "")
         + '<span class="srcline">出典 ' + esc(r.src)
         + (r.url && !seenUrl[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
         + '</span></span>'
