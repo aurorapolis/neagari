@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<!--
+  ねあがりチラシ (neagari)
+  Copyright (c) 2026 aurorapolis - All Rights Reserved.
+
+  本作品の複製・改変・再配布・商用利用を禁じます。
+  キャラクター「ねあがりちゃん」「月ちゃん」の図像を含みます。
+  Unauthorized copying, modification, redistribution, or commercial use
+  of this work is prohibited. See LICENSE for details.
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ねあがりチラシ</title>
+<meta name="description" content="食品と日用品の値上げを、週に一度まとめます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho+B1:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#F1EBD9; --teal:#1C8792; --teal-d:#0F5C65; --red:#DE4527;
+    --ink:#2A2622; --sub:#7C7264; --line:#D6CDB6;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; color:var(--ink);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(90,70,40,.07) 1px, transparent 0) 0 0/6px 6px,
+      var(--paper);
+    font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .min {
+    font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+    font-weight:800;
+  }
+  .dot {
+    font-family:"DotGothic16","Hiragino Kaku Gothic ProN",monospace; font-weight:400;
+    -webkit-font-smoothing:none;
+  }
+  .wrap { max-width:560px; margin:0 auto; padding:0 14px 62px; }
+
+  /* ── 見出し ── */
+  .masthead {
+    position:relative; background:var(--teal); color:#fff; overflow:hidden;
+    margin:0 -14px; padding:24px 16px 14px; border-bottom:5px solid var(--ink);
+  }
+  .rays {
+    position:absolute; inset:-60% -30%; z-index:0; opacity:.85;
+    background:repeating-conic-gradient(from 0deg at 50% 42%,
+      rgba(255,255,255,.11) 0deg 5deg, rgba(255,255,255,0) 5deg 11deg);
+  }
+  h1 {
+    margin:0; position:relative; z-index:2;
+    font-size:clamp(30px,11vw,46px); line-height:1.08; letter-spacing:-.045em;
+    color:var(--red); transform-origin:left center;
+    transform:perspective(360px) rotateY(-17deg) rotate(-1.2deg);
+    -webkit-text-stroke:7px var(--paper);
+    paint-order:stroke fill;
+    text-shadow:5px 5px 0 rgba(0,0,0,.3);
+  }
+  .lead {
+    margin:18px 0 0; font-size:11.5px; font-weight:700; line-height:1.7;
+    position:relative; z-index:1;
+  }
+  .metarow {
+    display:flex; align-items:center; gap:12px;
+    margin-top:16px; position:relative; z-index:1;
+  }
+  .upd:empty { display:none; }
+  .upd {
+    display:inline-flex; align-items:center; justify-content:center;
+    background:var(--paper); color:var(--teal-d);
+    font-size:10px; padding:4px 9px; letter-spacing:.03em; flex:none;
+  }
+  .badge {
+    position:absolute; left:2px; top:3px; z-index:1;
+    width:28px; height:28px; border-radius:50%;
+    background:var(--red);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:9.5px; line-height:1.08; text-align:center;
+    letter-spacing:.02em;
+    box-shadow:
+      inset 0 0 0 1px var(--red),
+      inset 0 0 0 2px rgba(255,255,255,.9),
+      2px 2px 0 rgba(0,0,0,.2);
+  }
+  .newbar {
+    position:relative;
+    background:var(--red); color:#fff; margin:0 -14px;
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    padding:9px 64px 9px 16px; border-bottom:4px solid var(--ink);
+  }
+  .bar-chara {
+    position:absolute; right:6px; bottom:0; width:56px; height:auto;
+    image-rendering:pixelated; pointer-events:none;
+  }
+  .nb-left { font-size:17px; letter-spacing:.06em; }
+
+  /* ── しぼりこみ ── */
+  .cats {
+    display:flex; gap:5px; flex-wrap:nowrap; margin:20px 0 26px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;
+  }
+  .cats::-webkit-scrollbar { display:none; }
+  .cat {
+    font:inherit; font-size:12.5px; font-weight:800; padding:6px 11px;
+    flex:none; white-space:nowrap;
+    border:2px solid var(--teal); background:#fff; color:var(--teal-d);
+    cursor:pointer; box-shadow:3px 3px 0 rgba(42,38,34,.75);
+  }
+  .cat.on { background:var(--teal); color:#fff; }
+  .cat:active { transform:translate(3px,3px); box-shadow:none; }
+  .cat:focus-visible, .row:focus-visible { outline:3px solid var(--red); outline-offset:2px; }
+
+  /* ── 日付 ── */
+  section { margin-bottom:26px; }
+  .daterow {
+    display:flex; align-items:center; gap:11px;
+    background:var(--teal); color:#fff; padding:8px 12px;
+  }
+  .daterow.soon { background:var(--red); }
+  .dnum { font-size:24px; line-height:1; letter-spacing:.01em; }
+  .dwd { font-size:12px; font-weight:800; opacity:.9; }
+  .when {
+    margin-left:auto; background:var(--paper); color:var(--ink);
+    font-size:12.5px; padding:3px 10px; letter-spacing:.03em;
+  }
+
+  /* ── 商品 ── */
+  .list { border:3px solid var(--ink); border-top:none; background:#FFFDF6; }
+  .item + .item { border-top:2px dashed var(--line); }
+  .row {
+    font:inherit; width:100%; display:flex; align-items:center; gap:10px;
+    padding:15px 12px; background:none; border:none; text-align:left;
+  }
+  .name { display:block; font-size:18px; font-weight:900; line-height:1.35; }
+  .maker { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:4px; }
+  .note { display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-top:6px; line-height:1.6; }
+  .ex {
+    display:block; font-size:12.5px; font-weight:600; line-height:1.65;
+    background:#EAF3F0; border-left:4px solid var(--teal);
+    padding:5px 8px; margin-top:7px;
+  }
+  .ex b { font-weight:800; color:var(--teal-d); margin-right:5px; }
+  .ex i { font-style:normal; font-weight:800; color:var(--teal-d); }
+  .srcline { display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-top:5px; }
+  .srcline a { color:var(--teal-d); margin-left:8px; }
+  .rate {
+    background:var(--red); color:#fff; font-size:24px; padding:6px 12px;
+    white-space:nowrap; letter-spacing:.01em; box-shadow:3px 3px 0 rgba(42,38,34,.75);
+  }
+  .rate.soft {
+    background:#FFFDF6; color:var(--sub); border:2px dashed var(--sub);
+    font-size:17px; box-shadow:none;
+  }
+  .tag-new {
+    display:inline-block; background:var(--teal); color:#fff; font-size:11px;
+    padding:3px 8px; margin-left:7px; vertical-align:middle; letter-spacing:.06em;
+  }
+  .tag-unsure {
+    display:inline-block; font-size:10px; font-weight:800; color:var(--sub);
+    border:1.5px solid var(--sub); padding:1px 6px; margin-left:7px; vertical-align:middle;
+  }
+
+  .arch-head {
+    margin:36px 0 10px; font-size:14px; font-weight:800; color:var(--sub);
+    border-bottom:2px solid var(--line); padding-bottom:6px;
+  }
+  .arch-head span { font-weight:700; font-size:11.5px; margin-left:8px; }
+  .arch { border:2px solid var(--line); background:#FBF8EE; }
+  .arch-row { display:flex; align-items:center; gap:10px; padding:10px 12px; }
+  .arch-row + .arch-row { border-top:1px dashed var(--line); }
+  .arch-date { font-size:12.5px; font-weight:700; color:var(--sub); white-space:nowrap; }
+  .arch-name { flex:1; min-width:0; font-size:15px; font-weight:800; }
+  .arch-maker { display:block; font-size:11px; font-weight:700; color:var(--sub); margin-top:2px; }
+  .arch-src { display:block; font-size:11.5px; font-weight:700; color:var(--sub); margin-top:4px; }
+  .arch-src a { color:var(--teal-d); margin-left:7px; }
+  .arch-rate { font-size:16px; font-weight:800; color:var(--sub); white-space:nowrap; }
+  .empty { font-size:14px; font-weight:700; color:var(--sub); padding:46px 0; text-align:center; line-height:2; }
+  .foot {
+    font-size:13px; color:var(--sub); margin-top:34px; line-height:2.1;
+    text-align:center; border-top:3px double var(--line); padding-top:18px;
+  }
+  .foot .box { border:1.5px solid var(--sub); padding:2px 7px; font-weight:800; }
+  .foot { position:relative; }
+  .foot-chara {
+    position:absolute; left:26px; bottom:-30px; width:56px; height:auto;
+    image-rendering:pixelated; pointer-events:none;
+  }
+
+  /* ── ハートボタン ── */
+  #heart {
+    position:fixed; right:14px; bottom:14px; z-index:50;
+    width:52px; height:52px; border:3px solid var(--ink);
+    background:var(--paper); color:var(--red); font-size:24px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
+    font-family:inherit; padding:0;
+  }
+  #heart:active { transform:translate(3px,3px); box-shadow:none; }
+  #heart.pop { animation:heartPop .4s ease; }
+  @keyframes heartPop { 0%,100%{transform:scale(1);} 40%{transform:scale(1.35);} }
+
+  #thanks {
+    position:fixed; right:14px; bottom:76px; z-index:50;
+    display:none; align-items:flex-end; gap:12px;
+    opacity:0; transform:translateY(8px); transition:opacity .25s ease, transform .25s ease;
+  }
+  #thanks.show { display:flex; opacity:1; transform:translateY(0); }
+  #thanks .bubble { align-self:flex-start; }
+  #thanks img { width:76px; height:auto; image-rendering:pixelated; }
+  #thanks img.n { margin-left:-13px; }   /* ねあがりちゃんは絵の左に余白があるぶん寄せる */
+  #thanks .bubble {
+    background:var(--paper); border:3px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    padding:9px 12px; font-size:13px; font-weight:800; line-height:1.5;
+    max-width:190px; position:relative;
+  }
+  #thanks .chara { display:flex; flex-direction:column; align-items:center; gap:2px; }
+  #thanks .who {
+    font-size:10.5px; font-weight:800; color:var(--ink);
+    background:var(--paper); border:2px solid var(--ink);
+    padding:1px 6px; letter-spacing:.02em; white-space:nowrap;
+  }
+  #thanks .bubble::after {
+    content:""; position:absolute; right:-11px; top:16px;
+    border-left:11px solid var(--ink); border-top:9px solid transparent; border-bottom:9px solid transparent;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="rays"></div>
+    <div class="badge min" id="badge">号<br>外</div>
+    <h1 class="min">ねあがりチラシ</h1>
+    <p class="lead dot" id="lead">食品と日用品の値上げをほぼだいたいたぶん毎日更新！</p>
+  </header>
+  <div id="newbar"></div>
+
+  <div class="cats" id="cats"></div>
+  <div id="body"><p class="empty">読みこんでいます…</p></div>
+
+  <p class="foot">
+    <span class="box">発表待ち</span> は、<br>
+    メーカーがまだ正式に発表していないものです。<br>
+    正確な価格は各社の発表をご確認ください！<br><br>
+    毎日って早いですよね。1週間も早い。<br>
+    だってもうなんか急に秋っぽい！<br><br>
+    最後まで見てくれてありがとうございました！<br><br>
+    <span class="min" style="letter-spacing:.08em">© aurorapolis</span>
+    <img class="foot-chara" id="foot-moon" alt="">
+  </p>
+</div>
+
+<button id="heart" aria-label="ありがとう">&#9829;</button>
+<div id="thanks" aria-live="polite">
+  <div class="bubble"><span id="thanks-text"></span></div>
+  <div class="chara">
+    <img id="thanks-img" alt="">
+    <span class="who" id="thanks-who"></span>
+  </div>
+</div>
+
+<script>
+/* ══ ドット絵をつくる部分 ══
+   16pxちょうどで文字を描き、にじみを消してから整数倍に拡大します。
+   こうしないと画面がなめらかに描いてしまい、粒が見えません。 */
+
+function dotCanvas(lines, rgb, gap){
+  const size = 16, lh = size + (gap == null ? 3 : gap);
+  const cv = document.createElement("canvas");
+  let cx = cv.getContext("2d");
+  cx.font = size + 'px "DotGothic16", monospace';
+  let w = 1;
+  lines.forEach(t => { w = Math.max(w, Math.ceil(cx.measureText(t).width)); });
+  cv.width = w;
+  cv.height = lh * lines.length;
+  cx = cv.getContext("2d");
+  cx.font = size + 'px "DotGothic16", monospace';
+  cx.textBaseline = "top";
+  cx.fillStyle = "#000";
+  lines.forEach((t, i) => cx.fillText(t, 0, i * lh + 1));
+  const img = cx.getImageData(0, 0, cv.width, cv.height), d = img.data;
+  for (let i = 0; i < d.length; i += 4){
+    if (d[i+3] > 100){ d[i]=rgb[0]; d[i+1]=rgb[1]; d[i+2]=rgb[2]; d[i+3]=255; }
+    else d[i+3] = 0;
+  }
+  cx.putImageData(img, 0, 0);
+
+  /* 上下の余った空白を切り落として、きっちり中心に置けるようにする */
+  let top = -1, bot = -1;
+  for (let y = 0; y < cv.height; y++){
+    let ink = false;
+    for (let x = 0; x < cv.width; x++){
+      if (d[(y * cv.width + x) * 4 + 3] === 255){ ink = true; break; }
+    }
+    if (ink){ if (top < 0) top = y; bot = y; }
+  }
+  if (top < 0) return cv;
+  const out = document.createElement("canvas");
+  out.width = cv.width;
+  out.height = bot - top + 1;
+  const ox = out.getContext("2d");
+  ox.imageSmoothingEnabled = false;
+  ox.drawImage(cv, 0, -top);
+  return out;
+}
+
+function mountDot(el, lines, rgb, avail, maxScale, gap){
+  if (!el) return;
+  try {
+    const cv = dotCanvas(lines, rgb, gap);
+    let sc = Math.floor(avail / cv.width);
+    sc = Math.max(1, Math.min(maxScale || 2, sc));
+    cv.style.width  = (cv.width  * sc) + "px";
+    cv.style.height = (cv.height * sc) + "px";
+    cv.style.imageRendering = "pixelated";
+    cv.style.display = "block";
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", lines.join(""));
+    el.innerHTML = "";
+    el.appendChild(cv);
+  } catch(e){}
+}
+
+const LEAD = ["食品と日用品の値上げを", "ほぼだいたいたぶん毎日更新！"];
+let dotReady = false;
+
+function paintDots(){
+  const head = document.querySelector(".masthead");
+  const avail = head.clientWidth - 32;
+  mountDot(document.getElementById("lead"), LEAD, [255,255,255], avail, 1);
+  const u = document.getElementById("upd");
+  if (u && u.dataset.text){
+    mountDot(u, [u.dataset.text], [15,92,101], avail - 90, 1);
+  }
+}
+
+const DOTREADY = (document.fonts && document.fonts.load)
+  ? document.fonts.load('16px "DotGothic16"', "食品日用値上号外しらべ月日毎更新ほだたぶん！")
+  : Promise.resolve();
+
+DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
+
+/* ══ ここから中身 ══ */
+const CHARA_BAR = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADfklEQVR42u2dz4dWURjH75sZErUoRYqXN0q9M0REXloUaUhtWrVIP0S06Q/oj2gT0S+1aMhsJpGiFjEzRInpBy1iKBG16CXRonav7kPnuU/nOefeO/P57K57Z86Z+/V8v55zz73TKVrGru29302az9v3Hzo5x1tVQKtAMASDlHSaNiFrRr24uSZ4/t3rb6bxd06sD57fc+ZHrRlHhWGJgGAwYqzpE5QZtXqwGLz+59xk1vnEZhwVhiUCgsH/Z1jqtTnZh8SOlzqjcveV1j6NCsMSAcFgREd67OzM1ahfeOz4ede+JhbvtcRYYvs0KgxLBASDdBmmMZw/xV3/i4nD94Lndx86SYVhiYBgUDHDNLwzbtPmbtY/+OuJo6XjDXfvJx1v32CqdPzq8R3Tz5NhWCIgGPyTMe15jMw461qhZGHuYa2ZVXemUWFYIiAY+GWYdoH3nozcyExqW2ZRYVgiIBhUz7DUa4tfPi+VjuVaolx7S07u8agwLBEQDLL1Yan3eMQ+L2o68nlWb/pl8Pp1ty5TYVgiIBg4ZVgs1udn0vNlpo13B6Xj/o5tSTPQOp6c//fTF6PGl2u5VBiWCAgG1TMsdg+H5skSbS1TZkhqUo+n9V1UGJYICAbVMyz3N2zBdv+pMCwREAyq92FgI3btkArDEgHBoDKN/279g+548Pqt125knd/Hc2eD5/cfuBA8r60d0odhiYBgsHz6MGtGyT0VVrQ9Iep8lH2H1syiwrBEQDBob4bFovVxR5Z+JR3fumeDCsMSAcFg+WRYbF+Vejzr86/YPTNUGJYICAbt7cO8v7e4YLy+f/0RFQYIhmBAhhVFob8P9mnvwVbdUO+1QyoMSwQEg/b0YVpm1d0HWfF+344KwxIBwSBdhsV+135tf9J1Ps+eXgme1/bCS4ZvFkvHW54/ocIAwRAM6sH9/TCZYdbvF/aMe9OtmaWhZZrMMImWaezpwBIBwaC5fZg3MjNknxabWVoGWvs0uRbq3adRYVgiIBg0N8O0PsfaN3mvJXr3qbzjjCUCgkFzM2zjpdsr+gZ792VUGJYICAZ+GRa7h2OlY+3LqDAsERAMRpj3F9T9Ppf3vkUr1rVODeseECoMSwQEA78+LPc7yNZ3iLX5Wdf2hs5/r3WtkQrDEgHBIF0fBr7Qh2GJgGDgl2G5aXpm5v6/11QYlggIBiP+AHPZ/0NjFbaBAAAAAElFTkSuQmCC";
+const CATS = ["すべて","食品","飲料","日用品","その他"];
+const WD = ["日","月","火","水","木","金","土"];
+let DATA = null, CAT = "すべて";
+
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+function parseDate(s){
+  const m = String(s||"").match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return m ? new Date(+m[1], +m[2]-1, +m[3]) : null;
+}
+function days(d){
+  const t = new Date(); t.setHours(0,0,0,0);
+  return Math.round((d - t) / 86400000);
+}
+function whenLabel(n){
+  if (n < 0) return (-n) + "日前から";
+  if (n === 0) return "きょうから";
+  if (n === 1) return "あした";
+  return "あと" + n + "日";
+}
+
+function exHtml(t){
+  // 末尾の「ほかにもあり！」だけ色を変える
+  const m = String(t).match(/^(.*?)[、,]?\s*(ほか(?:にもあり！?|[0-9０-９]+品目))$/);
+  if (m) return esc(m[1]) + '　<i>' + esc(m[2]) + '</i>';
+  return esc(t);
+}
+
+function items(){
+  if (!DATA) return [];
+  return (DATA.items || [])
+    .map(r => Object.assign({}, r, { d: parseDate(r.date) }))
+    .filter(r => r.d && r.item && days(r.d) >= -31)
+    .sort((a,b) => a.d - b.d);
+}
+
+function render(){
+  const all = items();
+
+  const u = parseDate(DATA && DATA.updated);
+  const updText = u ? (u.getMonth()+1) + "月" + u.getDate() + "日 しらべ" : "";
+  const n = all.filter(r => r.first_seen === (DATA && DATA.updated)).length;
+
+  document.getElementById("newbar").innerHTML =
+    '<div class="newbar">'
+    + '<span class="nb-left min">'
+    + (n > 0 ? "新しい値上げ " + n + " 件" : "今週のねあがり")
+    + '</span><span class="upd dot" id="upd"></span>'
+    + '<img class="bar-chara" src="' + CHARA_BAR + '" alt=""></div>';
+
+  const updEl = document.getElementById("upd");
+  updEl.dataset.text = updText;
+  updEl.textContent = updText;
+  if (dotReady && updText) mountDot(updEl, [updText], [15,92,101], 150, 1);
+
+  document.getElementById("cats").innerHTML = CATS.map(c =>
+    '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
+  ).join("");
+
+  const inCat = all.filter(r => CAT === "すべて" || r.cat === CAT);
+  const shown = inCat.filter(r => days(r.d) >= -7);
+  const past  = inCat.filter(r => days(r.d) < -7).sort((a, b) => b.d - a.d);
+  const body = document.getElementById("body");
+
+  function archiveHtml(){
+    if (!past.length) return "";
+    const seen = {};
+    let h = '<div class="arch-head">もう上がりました<span>ここ最近のやつ↓</span></div><div class="arch">';
+    past.forEach(r => {
+      h += '<div class="arch-row">'
+         + '<span class="arch-date">' + (r.d.getMonth() + 1) + '/' + r.d.getDate() + '</span>'
+         + '<span class="arch-name">' + esc(r.item)
+         + '<span class="arch-maker">' + esc(r.maker) + '</span>'
+         + '<span class="arch-src">出典 ' + esc(r.src)
+         + (r.url && !seen[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
+         + '</span></span>'
+         + '<span class="arch-rate">' + esc(r.rate) + '</span></div>';
+      if (r.url) seen[r.url] = true;
+    });
+    return h + '</div>';
+  }
+
+  if (!shown.length){
+    body.innerHTML = past.length
+      ? '<p class="empty">これから上がるものは<br>いまのところありません。</p>' + archiveHtml()
+      : '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>';
+    return;
+  }
+
+  const groups = new Map();
+  shown.forEach(r => {
+    if (!groups.has(r.date)) groups.set(r.date, []);
+    groups.get(r.date).push(r);
+  });
+
+  const seenUrl = {};        // 同じ記事へのリンクは最初の1回だけ出す
+
+  let html = "";
+  groups.forEach((rows, date) => {
+    const d = parseDate(date), k = days(d);
+    html += '<section><div class="daterow' + (k <= 7 ? " soon" : "") + '">'
+      + '<span class="dnum min">' + (d.getMonth()+1) + "/" + d.getDate() + '</span>'
+      + '<span class="dwd">' + WD[d.getDay()] + '曜</span>'
+      + '<span class="when min">' + whenLabel(k) + '</span>'
+      + '</div><div class="list">';
+
+    rows.forEach((r, i) => {
+      const isNew = r.first_seen === DATA.updated;
+      const unsure = r.sure === false;
+      html += '<div class="item"><div class="row">'
+        + '<span style="flex:1;min-width:0">'
+        + '<span class="name">' + esc(r.item)
+        + (isNew ? '<span class="tag-new min">NEW</span>' : "")
+        + (unsure ? '<span class="tag-unsure">発表待ち</span>' : "")
+        + '</span><span class="maker">' + esc(r.maker) + '</span>'
+        + (r.note ? '<span class="note">' + esc(r.note) + '</span>' : "")
+        + (r.ex ? '<span class="ex"><b>例</b>' + exHtml(r.ex) + '</span>' : "")
+        + '<span class="srcline">出典 ' + esc(r.src)
+        + (r.url && !seenUrl[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
+        + '</span></span>'
+        + '<span class="rate min' + (unsure ? " soft" : "") + '">'
+        + esc(r.rate) + (unsure ? "?" : "") + '</span></div>';
+
+      if (r.url) seenUrl[r.url] = true;
+      html += '</div>';
+    });
+    html += '</div></section>';
+  });
+  body.innerHTML = html + archiveHtml();
+}
+
+document.addEventListener("click", e => {
+  if (e.target.closest("a")) return;
+  const c = e.target.closest(".cat");
+  if (c){ CAT = c.dataset.cat; render(); }
+});
+
+/* data.json が読めないときに使う予備データ（公開後は data.json が優先されます） */
+const EMBED = {
+  "updated": "2026-09-05",
+  "items": [
+    { "item":"コカ・コーラ", "maker":"コカ・コーラボトラーズ", "cat":"飲料",
+      "date":"2026-09-01", "rate":"+20円", "note":"165品目が対象",
+      "src":"暮らしの設備ガイド",
+      "url":"https://h-bid.jp/september-2026-price-increase-list/",
+      "first_seen":"2026-09-05" },
+    { "item":"発泡酒・新ジャンル", "maker":"各社（酒税改正）", "cat":"飲料",
+      "date":"2026-10-01", "rate":"+7.26円", "note":"350ml缶あたり",
+      "src":"プラスチックパレット",
+      "url":"https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen":"2026-09-05" },
+    { "item":"ゆうパック", "maker":"日本郵便", "cat":"その他",
+      "date":"2026-10-01", "rate":"+10%", "note":"140サイズ以上は約20%",
+      "src":"プラスチックパレット",
+      "url":"https://plastic-pallet.co.jp/price-hike-list-2026-october/",
+      "first_seen":"2026-09-05" },
+    { "item":"洗たく洗剤", "maker":"ライオン", "cat":"日用品",
+      "date":"2026-10-01", "rate":"未定", "note":"上げ幅は未公表",
+      "src":"節約トレンドニュース",
+      "url":"https://papamamamoney.com/trend/2026-detergent-price/",
+      "first_seen":"2026-09-05", "sure": false },
+    { "item":"納豆・米菓", "maker":"各社", "cat":"食品",
+      "date":"2026-10-01", "rate":"+20%", "note":"報道による予測",
+      "src":"値上げレーダー",
+      "url":"https://neage-radar.com/monthly/2026-10",
+      "first_seen":"2026-09-05", "sure": false }
+  ]
+};
+
+fetch("data.json?" + Date.now())
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(j => { DATA = j; render(); })
+  .catch(() => { DATA = EMBED; render(); });
+
+/* ── ハートボタン：押すとキャラがひとこと言う ── */
+(function(){
+  const NEAGARI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADiElEQVR42u2dPWsVQRSGcyWFCEmhIIhCIIWgSUAQBA0IKkRttBELC8GoINj4U2wEwU8sFCSNgRAVtBCCIChCEhULQYilFgmInXYX96hz9jhnPlafp1v2cmf2vpzz8s7O7u0NdIyd20e/1zSfN+8/9HKOt24AOgWCIRikpFfbhKwe9fLmhuD5t0tfTOPvGN8YPL97+mtRj6PCaImAYNBnsPYJSo9aP7kY/Py3hYms84n1OCqMlggIBn/vYanX5mQOiR0vtUflzpXWnEaF0RIBwaBPT/bYBzNXo77w+IkLrrkmFu+1xFhicxoVRksEBAM/DxsZtnnQ0sOT/Oo/MX7kfvD8rqnTVBgtERAMfs+gNUfF5rShfbcbx5u3jGS94M+njjWON92dTTre3smjjePXj+9QYbREQDBw8jDtfozMadLjrD25tGeV9jQqjJYICAbpcpjEe09GbqQndc2zqDBaIiAYtPew1B41dv1R43j53OHGsVx7S07u8agwWiIgGGTLYdr9r4+r4X12B+beBc973y+qDbknY/Teq+Dnh29dpsJoiYBg4ORhqVk9cynY87vmaXL+8vqsyLVcKoyWCAgG7T3M+rzXL7lC8az/HS13UWG0REAwaO9h3u/3876/JnOOxDu35R5P+/2pMFoiIBi0z2G5iV1bjF2LjB0vdc6kwmiJgGDQJ/l767UcpvX8Z0+vBM9vu3Yj6w+2cv5s8Pz+gxeD57W1Q3IYLREQDOrJYbHPl+X2qOj5KPsOrZ5FhdESAcGgnIdpyFwSuxan3b/S8L6/Zd2zQYXREgHBoDXF/wNT5jLNw7w9IRbrfGP3zFBhtERAMKgnh1l5vjBfdHz5nhEqDBAMwQAP+1Nu6drzZKlzIhVGSwQEg3o97NOeQ43jocpykBXv5+2oMFoiIBiU8zDrvsS15cWmp41NmMbT9uZre+G1+Wx98YQKAwRDMChD8efDZO7S0DxM8ywNzdOkh0k0T2NPBy0REAy6m8OsnhWbs2K/z5rT5PV55zQqjJYICAbpPCz3f2RqHuO9luj9+/CMMy0REAzqzWHeuatreOcyKoyWCAgGfh6WO3f9a1hzGRVGSwQEgz7m/QXeezSsWPcleqPt6bBi3QNChdESAcHAL4flXiu0PkOszc+6trfmfL3WtUYqjJYICAbpchj4Qg6jJQKCgZ+H5aZ2z/R+DwcVRksEBIPW/ABhchT3jBln9AAAAABJRU5ErkJggg==";
+  const TSUKI   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABkCAYAAAALxleYAAAByUlEQVR42u3dO07DQBSF4RjRUbADikQC8aizChbGUlJQsorUiIIiBRuBOlPEGnked8z3d4kixzo6+n019iTTZjCe7re/OZ//+j5Nkc7/agOBCxzFaO63XAfPcTx+nL3e718XHa+28zWcUgSOyA7PdXTq4NakzudwSoHAB+K6trN7O1rDBQ6Bc/h6nL10rUXDKQUCH8nha5+zW9/z1HBKETh6zuHWRjRc4BB4XIfn3pP8OX1mfeHd9kXDIXCBo9EcPvrc3Xv9W8MFLnD0dPjoc3Xp58c1nFIgcIELHAIXOErM4aX3Tc5xc/t49vr5YXdxbm59PA2nFAh8JIenb9R2XurY3sdLr2H2aVIKBD6yw9P14rU9S9h7fVzDKUXgKOnwdO5svbYSjdpzuYZTisBRkGnOYf9tT8/cXL7U6RpOKQIHh8dxeq7jNZxSBI6WDk+p7fRcZ0b77VoNpxSBo6fDo83lo99jTc9fwylF4Ojp8GhzcHRnazilCBw9Hc7py5ydro9rOKUIHD0dXtrpo/3u4dLnVjScUgSOSA7PdXrK++EtlMNLP4ei4ZQicIzk8NKOn6P2vkt7fCgFAufwfteA1v+1puGUInA05A9dBY9fXu5/fAAAAABJRU5ErkJggg==";
+  const N = "ねあがりちゃん", T = "月ちゃん";
+  const LINES = [
+    [NEAGARI, N, "ありがとう！"],
+    [NEAGARI, N, "また来てね。"],
+    [NEAGARI, N, "うれしい！"],
+    [NEAGARI, N, "開発者もよろこぶ！"],
+    [NEAGARI, N, "開発者に伝えます！"],
+    [TSUKI, T, "毎日おつかれさまです"],
+    [TSUKI, T, "毎日ごくろうさまです"],
+    [TSUKI, T, "今日もおつかれさまです"],
+    [TSUKI, T, "ごくろうさまです"],
+    [TSUKI, T, "ありがとうございました"],
+    [TSUKI, T, "あたたかくしてください"]
+  ];
+  const btn = document.getElementById("heart");
+  const box = document.getElementById("thanks");
+  const txt = document.getElementById("thanks-text");
+  const who = document.getElementById("thanks-who");
+  const img = document.getElementById("thanks-img");
+  const fm = document.getElementById("foot-moon");
+  if (fm) fm.src = TSUKI;
+
+  if (!btn) return;
+
+  const FIRST_KEY = "neagari-heart-first";
+  let firstDone = false;
+  try { firstDone = localStorage.getItem(FIRST_KEY) === "1"; } catch(e) {}
+
+  let timer = null, last = -1;
+  btn.addEventListener("click", () => {
+    let pick;
+    if (!firstDone){
+      // はじめて押したときだけ、決まったひとこと
+      const isN = Math.random() < 0.5;
+      pick = isN
+        ? [NEAGARI, N, "このハートは遊びです！特に意味はなし！"]
+        : [TSUKI,   T, "このハートは遊びです。意味はないんです。"];
+      firstDone = true;
+      try { localStorage.setItem(FIRST_KEY, "1"); } catch(e) {}
+    } else {
+      let i = Math.floor(Math.random() * LINES.length);
+      if (i === last) i = (i + 1) % LINES.length;
+      last = i;
+      pick = LINES[i];
+    }
+    img.src = pick[0];
+    img.className = (pick[0] === NEAGARI) ? "n" : "";
+    who.textContent = pick[1];
+    txt.textContent = pick[2];
+    box.classList.add("show");
+    btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
+    clearTimeout(timer);
+    timer = setTimeout(() => box.classList.remove("show"), 3200);
+  });
+})();
+</script>
+</body>
+</html>
