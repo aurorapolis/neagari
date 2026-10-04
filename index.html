@@ -164,6 +164,21 @@
     border:1.5px solid var(--sub); padding:1px 6px; margin-left:7px; vertical-align:middle;
   }
 
+  /* ── 買っとくボタン（広告リンク） ── */
+  .buys { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:9px; }
+  .buy {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12.5px; font-weight:800; text-decoration:none;
+    color:var(--red); background:#fff; border:2px solid var(--red);
+    padding:4px 10px; box-shadow:2px 2px 0 rgba(42,38,34,.6);
+  }
+  .buy:active { transform:translate(2px,2px); box-shadow:none; }
+  .buy small { font-size:10.5px; font-weight:700; color:var(--sub); }
+  .pr {
+    font-size:9.5px; font-weight:800; color:var(--sub);
+    border:1.5px solid var(--sub); padding:0 4px; letter-spacing:.04em;
+  }
+
   .arch-head {
     margin:36px 0 10px; font-size:14px; font-weight:800; color:var(--sub);
     border-bottom:2px solid var(--line); padding-bottom:6px;
@@ -247,6 +262,10 @@
     <span class="box">発表待ち</span> は、<br>
     メーカーがまだ正式に発表していないものです。<br>
     正確な価格は各社の発表をご確認ください！<br><br>
+    <span id="pr-note" hidden><span class="pr">PR</span> の付いたボタンは広告リンクです。<br>
+    そこからお買い物されると、開発者に<br>
+    ほんの少しおこづかいが入ります。<br>
+    お値段は変わりません。ご安心を！<br><br></span>
     毎日って早いですよね。1週間も早い。<br>
     だってもうなんか急に秋っぽい！<br><br>
     最後まで見てくれてありがとうございました！<br><br>
@@ -265,6 +284,21 @@
 </div>
 
 <script>
+/* ══ 広告リンクの設定 ══
+   アフィリエイトに登録したら、ここに自分のIDを入れるだけ。
+   空のままなら、ボタンは出ません（今のまま公開しても大丈夫）。
+
+   AMAZON  … アソシエイトのトラッキングID（例："neagari-22"）
+   RAKUTEN … 楽天アフィリエイトで作ったリンクの
+             「hgc/」と「/」のあいだの文字列
+             （例："1a2b3c4d.5e6f7g8h.1a2b3c4d.5e6f7g8h"）
+
+   どちらか片方だけでもOK。両方入れるとボタンが2つ並びます。 */
+const AFF = {
+  AMAZON:  "",
+  RAKUTEN: ""
+};
+
 /* ══ ドット絵をつくる部分 ══
    16pxちょうどで文字を描き、にじみを消してから整数倍に拡大します。
    こうしないと画面がなめらかに描いてしまい、粒が見えません。 */
@@ -376,6 +410,32 @@ function exHtml(t){
   return esc(t);
 }
 
+/* 「buy」に書いた検索ことばから、広告リンクのボタンをつくる。
+   確定していないもの・電気ガスなど（その他）には出さない。 */
+function buyHtml(r, k){
+  const kw = String(r.buy || "").trim();
+  if (!kw || r.sure === false || r.cat === "その他") return "";
+  const links = [];
+  if (AFF.AMAZON){
+    links.push(["Amazon",
+      "https://www.amazon.co.jp/s?k=" + encodeURIComponent(kw)
+      + "&tag=" + encodeURIComponent(AFF.AMAZON)]);
+  }
+  if (AFF.RAKUTEN){
+    const dest = "https://search.rakuten.co.jp/search/mall/" + encodeURIComponent(kw) + "/";
+    links.push(["楽天",
+      "https://hb.afl.rakuten.co.jp/hgc/" + AFF.RAKUTEN
+      + "/?pc=" + encodeURIComponent(dest) + "&m=" + encodeURIComponent(dest)]);
+  }
+  if (!links.length) return "";
+  const label = k > 0 ? "いまのうちに買っとく" : "売り場をのぞく";
+  return '<span class="buys">'
+    + links.map(([name, url]) =>
+        '<a class="buy" href="' + esc(url) + '" target="_blank" rel="sponsored noopener">'
+        + label + ' <small>' + name + '</small></a>').join("")
+    + '<span class="pr">PR</span></span>';
+}
+
 function items(){
   if (!DATA) return [];
   return (DATA.items || [])
@@ -444,6 +504,7 @@ function render(){
   });
 
   const seenUrl = {};        // 同じ記事へのリンクは最初の1回だけ出す
+  let anyBuy = false;
 
   let html = "";
   groups.forEach((rows, date) => {
@@ -457,6 +518,8 @@ function render(){
     rows.forEach((r, i) => {
       const isNew = r.first_seen === DATA.updated;
       const unsure = r.sure === false;
+      const buy = buyHtml(r, k);
+      if (buy) anyBuy = true;
       html += '<div class="item"><div class="row">'
         + '<span style="flex:1;min-width:0">'
         + '<span class="name">' + esc(r.item)
@@ -467,7 +530,9 @@ function render(){
         + (r.ex ? '<span class="ex"><b>例</b>' + exHtml(r.ex) + '</span>' : "")
         + '<span class="srcline">出典 ' + esc(r.src)
         + (r.url && !seenUrl[r.url] ? '<a href="' + esc(r.url) + '" target="_blank" rel="noreferrer">記事を読む</a>' : "")
-        + '</span></span>'
+        + '</span>'
+        + buy
+        + '</span>'
         + '<span class="rate min' + (unsure ? " soft" : "") + '">'
         + esc(r.rate) + (unsure ? "?" : "") + '</span></div>';
 
@@ -477,6 +542,10 @@ function render(){
     html += '</div></section>';
   });
   body.innerHTML = html + archiveHtml();
+
+  /* 広告ボタンが1つでも出ているときだけ、下に説明を出す */
+  const pn = document.getElementById("pr-note");
+  if (pn) pn.hidden = !anyBuy;
 }
 
 document.addEventListener("click", e => {
