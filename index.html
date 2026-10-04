@@ -418,10 +418,17 @@ function exHtml(t){
 }
 
 /* 「buy」に書いた検索ことばから、広告リンクのボタンをつくる。
-   確定していないもの・電気ガスなど（その他）には出さない。 */
+   ・「tip」があればそちらを優先（電気・ガスなど、買えないもの向け。例："節電グッズ"）
+   ・発表待ちのものは、あおらないように「いちおう見ておく？」にする
+   ・「その他」も、buy か tip を書いたものには出る */
 function buyHtml(r, k){
-  const kw = String(r.buy || "").trim();
-  if (!kw || r.sure === false || r.cat === "その他") return "";
+  const tip = String(r.tip || "").trim();
+  const kw  = tip || String(r.buy || "").trim();
+  if (!kw) return "";
+  const label = tip ? tip + "をのぞく"
+              : r.sure === false ? "いちおう見ておく？"
+              : k <= 0 ? "売り場をのぞく"
+              : "いまのうちに買っとく";
   const links = [];
   if (AFF.AMAZON){
     links.push(["Amazon",
@@ -435,7 +442,6 @@ function buyHtml(r, k){
       + "/?pc=" + encodeURIComponent(dest) + "&link_type=text"]);
   }
   if (!links.length) return "";
-  const label = k > 0 ? "いまのうちに買っとく" : "売り場をのぞく";
   return '<span class="buys">'
     + links.map(([name, url]) =>
         '<a class="buy" href="' + esc(url) + '" target="_blank" rel="sponsored noopener">'
