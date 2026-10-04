@@ -1,5 +1,12 @@
 {
   "updated": "2026-09-27",
+  "ad": [
+    { "from": "2026-10-04T20:00:00+09:00", "to": "2026-10-09T01:59:00+09:00",
+      "line": "お買い物マラソン",
+      "tag": "ねあがりちゃん推薦", "head": "お買い物マラソン\n開催中",
+      "body": "お店を回るほどポイントがふえる期間です。値上げ前のまとめ買いに。",
+      "btn": "会場をのぞく ▶", "url": "https://event.rakuten.co.jp/campaign/point-up/marathon/" }
+  ],
   "items": [
     { "item": "発泡酒・新ジャンル", "maker": "各社（酒税改正）", "cat": "飲料", "date": "2026-10-01", "rate": "+7.26円", "note": "350ml缶あたり。ビールは下がる", "ex": "金麦、本麒麟、麦とホップ", "buy": "金麦", "src": "プラスチックパレット", "url": "https://plastic-pallet.co.jp/price-hike-list-2026-october/", "first_seen": "2026-09-06" },
     { "item": "チューハイ・サワー", "maker": "各社（酒税改正）", "cat": "飲料", "date": "2026-10-01", "rate": "+7円", "note": "350ml缶あたり。酒税の引き上げ", "ex": "氷結、本搾り", "buy": "氷結", "src": "節約トレンドニュース", "url": "https://papamamamoney.com/trend/2026-october-price-increase/", "first_seen": "2026-09-27" },
@@ -39,4 +46,4 @@
     { "item": "小麦・納豆", "maker": "各社", "cat": "食品", "date": "2026-11-01", "rate": "+100%", "note": "11月で最大の幅。予測を含む", "ex": "小麦粉、納豆、ベビーフード", "buy": "小麦粉", "src": "値上げレーダー", "url": "https://neage-radar.com/monthly/2026-11", "first_seen": "2026-09-07", "sure": false },
     { "item": "味の素・マヨネーズ", "maker": "味の素", "cat": "食品", "date": "2026-12-01", "rate": "+6〜10%", "note": "調味料37品目とマヨネーズ21品目", "ex": "味の素、やさしお、ピュアセレクトマヨネーズ、ほか55品目", "buy": "ピュアセレクト マヨネーズ", "src": "味の素", "url": "https://news.ajinomoto.co.jp/2026/09/20260901-02.html", "first_seen": "2026-09-16" }
   ]
-}
+    }
