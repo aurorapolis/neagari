@@ -175,9 +175,19 @@
   .buy:active { transform:translate(2px,2px); box-shadow:none; }
   .buy small { font-size:10.5px; font-weight:700; color:var(--sub); }
   .pr {
-    font-size:9.5px; font-weight:800; color:var(--sub);
-    border:1.5px solid var(--sub); padding:0 4px; letter-spacing:.04em;
+    font-size:11px; font-weight:800; color:var(--sub);
+    border:1.5px solid var(--sub); padding:1px 5px; letter-spacing:.04em;
   }
+  .adnote {
+    margin:16px 0 0; padding:9px 12px;
+    background:#FFFDF6; border:2px dashed var(--sub);
+    font-size:12.5px; font-weight:700; line-height:1.7; color:var(--ink);
+  }
+  .adnote b {
+    display:inline-block; background:var(--teal); color:#fff;
+    font-size:11px; padding:1px 7px; margin-right:6px; letter-spacing:.06em;
+  }
+  .adnote .pr { margin:0 2px; }
 
   .arch-head {
     margin:36px 0 10px; font-size:14px; font-weight:800; color:var(--sub);
@@ -254,6 +264,7 @@
     <p class="lead dot" id="lead">食品と日用品の値上げをほぼだいたいたぶん毎日更新！</p>
   </header>
   <div id="newbar"></div>
+  <p class="adnote" id="ad-note" hidden><b class="min">おしらせ</b><span class="pr">広告</span> とついたボタンは、ただ楽天サイトへいくボタンです。広告動画とかは流れません！<br>そこからお買い物されると、開発者にほんの少しおこづかいが入るようになっています。お値段などはまったく変わりません。ご安心を！</p>
 
   <div class="cats" id="cats"></div>
   <div id="body"><p class="empty">読みこんでいます…</p></div>
@@ -262,10 +273,6 @@
     <span class="box">発表待ち</span> は、<br>
     メーカーがまだ正式に発表していないものです。<br>
     正確な価格は各社の発表をご確認ください！<br><br>
-    <span id="pr-note" hidden><span class="pr">PR</span> の付いたボタンは広告リンクです。<br>
-    そこからお買い物されると、開発者に<br>
-    ほんの少しおこづかいが入ります。<br>
-    お値段は変わりません。ご安心を！<br><br></span>
     毎日って早いですよね。1週間も早い。<br>
     だってもうなんか急に秋っぽい！<br><br>
     最後まで見てくれてありがとうございました！<br><br>
@@ -433,7 +440,7 @@ function buyHtml(r, k){
     + links.map(([name, url]) =>
         '<a class="buy" href="' + esc(url) + '" target="_blank" rel="sponsored noopener">'
         + label + ' <small>' + name + '</small></a>').join("")
-    + '<span class="pr">PR</span></span>';
+    + '<span class="pr">広告</span></span>';
 }
 
 function items(){
@@ -544,7 +551,7 @@ function render(){
   body.innerHTML = html + archiveHtml();
 
   /* 広告ボタンが1つでも出ているときだけ、下に説明を出す */
-  const pn = document.getElementById("pr-note");
+  const pn = document.getElementById("ad-note");
   if (pn) pn.hidden = !anyBuy;
 }
 
