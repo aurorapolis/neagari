@@ -296,7 +296,7 @@
    どちらか片方だけでもOK。両方入れるとボタンが2つ並びます。 */
 const AFF = {
   AMAZON:  "",
-  RAKUTEN: ""
+  RAKUTEN: "58342e0e.dcae8d4f.58342e0f.dfc9b8f4"
 };
 
 /* ══ ドット絵をつくる部分 ══
@@ -425,7 +425,7 @@ function buyHtml(r, k){
     const dest = "https://search.rakuten.co.jp/search/mall/" + encodeURIComponent(kw) + "/";
     links.push(["楽天",
       "https://hb.afl.rakuten.co.jp/hgc/" + AFF.RAKUTEN
-      + "/?pc=" + encodeURIComponent(dest) + "&m=" + encodeURIComponent(dest)]);
+      + "/?pc=" + encodeURIComponent(dest) + "&link_type=text"]);
   }
   if (!links.length) return "";
   const label = k > 0 ? "いまのうちに買っとく" : "売り場をのぞく";
