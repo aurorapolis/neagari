@@ -111,6 +111,14 @@
     cursor:pointer; box-shadow:3px 3px 0 rgba(42,38,34,.75);
   }
   .cat.on { background:var(--teal); color:#fff; }
+  .cat.kattoku { border-color:var(--red); color:var(--red); }
+  .koukoku.yure { animation:yure .6s ease 2; }
+  @keyframes yure {
+    0%,100% { transform:rotate(0); }
+    25% { transform:rotate(-1.2deg); }
+    75% { transform:rotate(1.2deg); }
+  }
+  @media (prefers-reduced-motion: reduce){ .koukoku.yure { animation:none; outline:3px solid var(--red); } }
   .cat:active { transform:translate(3px,3px); box-shadow:none; }
   .cat:focus-visible, .row:focus-visible { outline:3px solid var(--red); outline-offset:2px; }
 
@@ -189,6 +197,67 @@
   }
   .adnote .pr { margin:0 2px; }
 
+  /* ── 広告欄（昭和の新聞の下のほうにある、あれ） ── */
+  .koukoku {
+    position:relative; display:block; text-decoration:none; color:var(--ink);
+    margin:34px 0 0; padding:5px; background:#FFFDF6;
+    border:3px double var(--ink); box-shadow:3px 3px 0 rgba(42,38,34,.75);
+  }
+  .koukoku:active { transform:translate(3px,3px); box-shadow:none; }
+  .kk-in {
+    display:grid; grid-template-columns:1fr auto; gap:4px 12px; align-items:center;
+    border:1px solid var(--ink); padding:12px 14px 12px;
+    background:
+      repeating-linear-gradient(135deg, rgba(28,135,146,.06) 0 2px, transparent 2px 7px);
+  }
+  .kk-tag {
+    grid-column:1 / -1; justify-self:start;
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11.5px; font-weight:800; color:var(--teal-d); letter-spacing:.08em;
+  }
+  .kk-tag i {
+    font-style:normal; background:var(--red); color:#fff;
+    font-size:10.5px; padding:2px 6px; letter-spacing:.1em;
+    box-shadow:inset 0 0 0 1px var(--red), inset 0 0 0 2px rgba(255,255,255,.85);
+  }
+  .kk-head {
+    margin:2px 0 0; font-size:clamp(22px,7vw,28px); line-height:1.2;
+    color:var(--red); letter-spacing:-.02em; text-wrap:balance;
+    -webkit-text-stroke:.4px var(--red);
+  }
+  .kk-body { margin:6px 0 0; font-size:12.5px; font-weight:700; line-height:1.7; color:var(--ink); }
+  /* セール中だけ出る、上の1行 */
+  .saleline {
+    font:inherit; width:100%; margin:16px 0 0; cursor:pointer; text-align:left;
+    display:flex; align-items:center; gap:7px; flex-wrap:nowrap;
+    background:#FFFDF6; color:var(--ink);
+    border:2px solid var(--red); box-shadow:3px 3px 0 rgba(42,38,34,.75);
+    padding:8px 10px;
+  }
+  .saleline:active { transform:translate(3px,3px); box-shadow:none; }
+  .sl-now {
+    flex:none; white-space:nowrap; background:var(--red); color:#fff; font-size:13px; padding:2px 8px;
+    letter-spacing:.06em; animation:slBlink 1.6s steps(1) infinite;
+  }
+  @keyframes slBlink { 50% { background:var(--teal-d); } }
+  @media (prefers-reduced-motion: reduce){ .sl-now { animation:none; } }
+  .sl-name { font-size:14.5px; color:var(--red); letter-spacing:0; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sl-until { font-size:11.5px; font-weight:700; color:var(--sub); white-space:nowrap; }
+  .sl-go { margin-left:auto; font-size:13px; font-weight:800; color:var(--teal-d); white-space:nowrap; }
+  .saleline .pr { margin-left:0; flex:none; }
+  .kk-until {
+    display:inline-block; margin-top:6px; font-size:12px; color:var(--paper);
+    background:var(--ink); padding:2px 8px; letter-spacing:.04em;
+  }
+  .kk-chara { width:52px; height:auto; image-rendering:pixelated; align-self:end; }
+  .kk-btn {
+    grid-column:1 / -1; justify-self:start; margin-top:8px;
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--teal); color:#fff; font-size:13.5px; font-weight:800;
+    padding:6px 12px; letter-spacing:.04em; box-shadow:2px 2px 0 var(--ink);
+  }
+  .kk-mark { position:absolute; right:10px; top:-10px; background:var(--paper); }
+
   .arch-head {
     margin:36px 0 10px; font-size:14px; font-weight:800; color:var(--sub);
     border-bottom:2px solid var(--line); padding-bottom:6px;
@@ -266,6 +335,7 @@
   <div id="newbar"></div>
   <p class="adnote" id="ad-note" hidden><b class="min">おしらせ</b><span class="pr">広告</span> とついたボタンは、ただ楽天サイトへいくボタンです。広告動画とかは流れません！<br>そこからお買い物されると、開発者にほんの少しおこづかいが入るようになっています。お値段などはまったく変わりません。ご安心を！</p>
 
+  <div id="sale-line"></div>
   <div class="cats" id="cats"></div>
   <div id="body"><p class="empty">読みこんでいます…</p></div>
 
@@ -449,6 +519,52 @@ function buyHtml(r, k){
     + '<span class="pr">広告</span></span>';
 }
 
+/* 広告欄。data.json に "ad" を書くとその内容に、なければ下の基本形になる。
+   "ad": { "tag":"…", "head":"1行目\n2行目", "body":"…", "btn":"…", "url":"楽天のページ" } */
+const AD_DEFAULT = {
+  tag:  "ねあがりちゃん推薦",
+  head: "値上げの前に\nまとめ買い",
+  body: "毎日つかうものは、楽天市場で。ポイントもたまります。",
+  btn:  "楽天市場をのぞく ▶",
+  url:  "https://www.rakuten.co.jp/"
+};
+/* "ad" はいくつでも並べられる。from〜to の期間中のものだけ出て、
+   どれにも当てはまらないときは基本形になる（期間が終われば自動で元に戻る） */
+function pickAd(){
+  let list = DATA && DATA.ad;
+  if (!list) return {};
+  if (!Array.isArray(list)) list = [list];
+  const now = new Date();
+  return list.find(x => x &&
+    (!x.from || now >= new Date(x.from)) &&
+    (!x.to   || now <  new Date(x.to))) || {};
+}
+function untilText(to){
+  const d = new Date(to);
+  if (isNaN(d)) return "";
+  return (d.getMonth()+1) + "月" + d.getDate() + "日 "
+    + d.getHours() + ":" + String(d.getMinutes()).padStart(2,"0") + "まで";
+}
+function adHtml(){
+  if (!AFF.RAKUTEN) return "";
+  const pick = pickAd();
+  const a = Object.assign({}, AD_DEFAULT, pick);
+  const href = "https://hb.afl.rakuten.co.jp/hgc/" + AFF.RAKUTEN
+    + "/?pc=" + encodeURIComponent(a.url) + "&link_type=text";
+  const br = t => esc(t).replace(/\n/g, "<br>");
+  return '<a class="koukoku" href="' + esc(href) + '" target="_blank" rel="sponsored noopener">'
+    + '<span class="pr kk-mark">広告</span>'
+    + '<span class="kk-in">'
+    + '<span class="kk-tag min"><i>推</i>' + esc(a.tag) + '</span>'
+    + '<span style="min-width:0"><span class="kk-head min" style="display:block">' + br(a.head) + '</span>'
+    + '<span class="kk-body" style="display:block">' + br(a.body) + '</span>'
+    + (pick.to ? '<span class="kk-until min">' + untilText(pick.to) + '</span>' : "")
+    + '</span>'
+    + '<img class="kk-chara" src="' + CHARA_BAR + '" alt="">'
+    + '<span class="kk-btn min">' + esc(a.btn) + '</span>'
+    + '</span></a>';
+}
+
 function items(){
   if (!DATA) return [];
   return (DATA.items || [])
@@ -478,7 +594,8 @@ function render(){
 
   document.getElementById("cats").innerHTML = CATS.map(c =>
     '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
-  ).join("");
+  ).join("")
+    + (AFF.RAKUTEN ? '<button class="cat kattoku" data-go="koukoku">買っとく ▼</button>' : "");
 
   const inCat = all.filter(r => CAT === "すべて" || r.cat === CAT);
   const shown = inCat.filter(r => days(r.d) >= -7);
@@ -503,10 +620,26 @@ function render(){
     return h + '</div>';
   }
 
+  const ad = adHtml();
+  const pn = document.getElementById("ad-note");
+
+  /* セール期間中だけ、上に1行。押すと下の広告欄へ */
+  const sale = pickAd();
+  document.getElementById("sale-line").innerHTML = (ad && sale.head)
+    ? '<button class="saleline" data-go="koukoku">'
+      + '<span class="sl-now min">実施中！</span>'
+      + '<span class="sl-name min">' + esc(sale.line || String(sale.head).replace(/\n/g, "")) + '</span>'
+      + (sale.to ? '<span class="sl-until">〜' + (new Date(sale.to).getMonth()+1) + '/' + new Date(sale.to).getDate() + '</span>' : "")
+      + '<span class="sl-go" aria-label="見に行く">▼</span>'
+      + '<span class="pr">広告</span>'
+      + '</button>'
+    : "";
+
   if (!shown.length){
-    body.innerHTML = past.length
+    body.innerHTML = (past.length
       ? '<p class="empty">これから上がるものは<br>いまのところありません。</p>' + archiveHtml()
-      : '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>';
+      : '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>') + ad;
+    if (pn) pn.hidden = !ad;
     return;
   }
 
@@ -554,15 +687,24 @@ function render(){
     });
     html += '</div></section>';
   });
-  body.innerHTML = html + archiveHtml();
+  body.innerHTML = html + ad + archiveHtml();
 
-  /* 広告ボタンが1つでも出ているときだけ、下に説明を出す */
-  const pn = document.getElementById("ad-note");
-  if (pn) pn.hidden = !anyBuy;
+  /* 広告が1つでも出ているときだけ、上に説明を出す */
+  if (pn) pn.hidden = !(anyBuy || ad);
 }
 
 document.addEventListener("click", e => {
   if (e.target.closest("a")) return;
+  /* 「買っとく」タブ：下の広告欄までスクロールして、ちょっと揺らす */
+  if (e.target.closest("[data-go]")){
+    const k = document.querySelector(".koukoku");
+    if (k){
+      k.scrollIntoView({ behavior:"smooth", block:"center" });
+      k.classList.remove("yure");
+      setTimeout(() => { void k.offsetWidth; k.classList.add("yure"); }, 550);
+    }
+    return;
+  }
   const c = e.target.closest(".cat");
   if (c){ CAT = c.dataset.cat; render(); }
 });
