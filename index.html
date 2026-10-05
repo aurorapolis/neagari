@@ -249,6 +249,7 @@
     display:inline-block; margin-top:6px; font-size:12px; color:var(--paper);
     background:var(--ink); padding:2px 8px; letter-spacing:.04em;
   }
+  /* 絵は26×31ドット。52pxでちょうど2倍になり、粒がくっきり出る */
   .kk-chara { width:52px; height:auto; image-rendering:pixelated; align-self:end; }
   .kk-btn {
     grid-column:1 / -1; justify-self:start; margin-top:8px;
@@ -333,7 +334,7 @@
     <p class="lead dot" id="lead">食品と日用品の値上げをほぼだいたいたぶん毎日更新！</p>
   </header>
   <div id="newbar"></div>
-  <p class="adnote" id="ad-note" hidden><b class="min">おしらせ</b><span class="pr">広告</span> とついたボタンは、ただ楽天サイトへいくボタンです。広告動画とかは流れません！<br>そこからお買い物されると、開発者にほんの少しおこづかいが入るようになっています。お値段などはまったく変わりません。ご安心を！</p>
+  <p class="adnote" id="ad-note" hidden><b class="min">おしらせ</b><span class="pr">広告</span> とついたボタンは、ただ楽天サイトへいくボタンです。<br>広告動画とかは流れません！ご安心を！</p>
 
   <div id="sale-line"></div>
   <div class="cats" id="cats"></div>
@@ -343,8 +344,9 @@
     <span class="box">発表待ち</span> は、<br>
     メーカーがまだ正式に発表していないものです。<br>
     正確な価格は各社の発表をご確認ください！<br><br>
-    毎日って早いですよね。1週間も早い。<br>
-    だってもうなんか急に秋っぽい！<br><br>
+    毎日のスピードが早い！１日の速さが進んでるのかな？<br>
+    秋はどこだ！けど急に太陽が強かったり！<br>
+    みなさん、体調に気をつけていきましょう！<br><br>
     最後まで見てくれてありがとうございました！<br><br>
     <span class="min" style="letter-spacing:.08em">© aurorapolis</span>
     <img class="foot-chara" id="foot-moon" alt="">
@@ -458,6 +460,8 @@ DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
 
 /* ══ ここから中身 ══ */
 const CHARA_BAR = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADfklEQVR42u2dz4dWURjH75sZErUoRYqXN0q9M0REXloUaUhtWrVIP0S06Q/oj2gT0S+1aMhsJpGiFjEzRInpBy1iKBG16CXRonav7kPnuU/nOefeO/P57K57Z86Z+/V8v55zz73TKVrGru29302az9v3Hzo5x1tVQKtAMASDlHSaNiFrRr24uSZ4/t3rb6bxd06sD57fc+ZHrRlHhWGJgGAwYqzpE5QZtXqwGLz+59xk1vnEZhwVhiUCgsH/Z1jqtTnZh8SOlzqjcveV1j6NCsMSAcFgREd67OzM1ahfeOz4ede+JhbvtcRYYvs0KgxLBASDdBmmMZw/xV3/i4nD94Lndx86SYVhiYBgUDHDNLwzbtPmbtY/+OuJo6XjDXfvJx1v32CqdPzq8R3Tz5NhWCIgGPyTMe15jMw461qhZGHuYa2ZVXemUWFYIiAY+GWYdoH3nozcyExqW2ZRYVgiIBhUz7DUa4tfPi+VjuVaolx7S07u8agwLBEQDLL1Yan3eMQ+L2o68nlWb/pl8Pp1ty5TYVgiIBg4ZVgs1udn0vNlpo13B6Xj/o5tSTPQOp6c//fTF6PGl2u5VBiWCAgG1TMsdg+H5skSbS1TZkhqUo+n9V1UGJYICAbVMyz3N2zBdv+pMCwREAyq92FgI3btkArDEgHBoDKN/279g+548Pqt125knd/Hc2eD5/cfuBA8r60d0odhiYBgsHz6MGtGyT0VVrQ9Iep8lH2H1syiwrBEQDBob4bFovVxR5Z+JR3fumeDCsMSAcFg+WRYbF+Vejzr86/YPTNUGJYICAbt7cO8v7e4YLy+f/0RFQYIhmBAhhVFob8P9mnvwVbdUO+1QyoMSwQEg/b0YVpm1d0HWfF+344KwxIBwSBdhsV+135tf9J1Ps+eXgme1/bCS4ZvFkvHW54/ocIAwRAM6sH9/TCZYdbvF/aMe9OtmaWhZZrMMImWaezpwBIBwaC5fZg3MjNknxabWVoGWvs0uRbq3adRYVgiIBg0N8O0PsfaN3mvJXr3qbzjjCUCgkFzM2zjpdsr+gZ792VUGJYICAZ+GRa7h2OlY+3LqDAsERAMRpj3F9T9Ppf3vkUr1rVODeseECoMSwQEA78+LPc7yNZ3iLX5Wdf2hs5/r3WtkQrDEgHBIF0fBr7Qh2GJgGDgl2G5aXpm5v6/11QYlggIBiP+AHPZ/0NjFbaBAAAAAElFTkSuQmCC";
+/* 広告欄のねあがりちゃん（右手をあげて走るポーズ・26×31ドット） */
+const CHARA_AD = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAACA0lEQVR42rVWwUdEQRj/vfWWLHUoIsXyYtNuyxKRJSqWSF06JZtKRJekP6FzdYnYdmNlu9ShFSnqECuixNbGUpQ6ZTu0JDpsp3nezJuZN++1/U7z5s18v+/3fd/MNxpcIBwyak5rSuUnjTevuSW4zgQAAA93H+b/7p5mAEDv7JeQUFdVc50JoCFeBAB8F6LCNSyhEhEbKhGBbC9RpjktJF6y4IWOhVWZJlOwu/yNemBqrcEeusP9Le7i1rag1FhlcgwtuTwA4PFg0F51rAovRJXJMXNMyPrjI/Zi4Bkfn1gwx5eFY6mallyeUsQrcd3p8IVDRo31TgjJOp31XoTb06xy8mOJpPubIRwyajISfzCOSFenzZFYIkmFzufVQ4JIV6eSSp/XS9ItdPwjrEfHE9Hr/BwAoCOV5hZJLJGk5mOJpDeijlRaOYdSRbwGxzN2e5o154+CfgDA6PMPlBtfOGTU3vqGuRte1ldsc/3xEZNoYGiR+te0s8FXpNKuWVwWjhHZPrHNE5JS+Unjhk6kBgBl8OJ8U6rCejx0N2oaI1EbiROBsPHx1FgJRCSkEEQHXBepeV+dNsfG3g21iYSKDZ1VkfQKkuWmel9E9b7o+ZbwqeTmLwRUjmTnhqD96oz6/pxZkpZz3S5VWT7YNx1FxHpcb2heHvXEU6fcuu6wMkOqjfEXIyrPMpy2vTwAAAAASUVORK5CYII=";
 const CATS = ["すべて","食品","飲料","日用品","その他"];
 const WD = ["日","月","火","水","木","金","土"];
 let DATA = null, CAT = "すべて";
@@ -560,7 +564,7 @@ function adHtml(){
     + '<span class="kk-body" style="display:block">' + br(a.body) + '</span>'
     + (pick.to ? '<span class="kk-until min">' + untilText(pick.to) + '</span>' : "")
     + '</span>'
-    + '<img class="kk-chara" src="' + CHARA_BAR + '" alt="">'
+    + '<img class="kk-chara" src="' + CHARA_AD + '" alt="">'
     + '<span class="kk-btn min">' + esc(a.btn) + '</span>'
     + '</span></a>';
 }
