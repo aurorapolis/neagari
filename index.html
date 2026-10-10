@@ -576,7 +576,8 @@ function buyHtml(r, k){
 /* ══ ねあがりニュース ══
    data.json の "news" に書くと、一覧の上にお知らせとして出る（広告ではない）。
    from〜to の期間中のものだけ出て、期間が終われば自動で消える。何もなければ欄ごと出ない。
-   "news": [ { "from":"…", "to":"…", "tag":"北海道", "head":"見出し", "body":"本文", "src":"出典", "url":"記事のURL" } ] */
+   "news": [ { "from":"…", "to":"…", "tag":"北海道", "head":"見出し", "body":"本文", "src":"出典", "url":"記事のURL" } ]
+   "buy" か "tip" を書くと、値上げ一覧と同じ楽天ボタン（広告つき）が出る。書かなければ出ない。 */
 function pickNews(){
   let list = DATA && DATA.news;
   if (!list) return [];
@@ -601,7 +602,9 @@ function newsHtml(){
         + ((x.src || x.url) ? '<span class="news-src">' + esc(x.src || "")
           + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noreferrer">記事 ▶</a>' : "")
           + '</span>' : "")
-        + '</span></div>').join("")
+        + '</span>'
+        + buyHtml(x, 1)
+        + '</div>').join("")
     + '</div>';
 }
 
@@ -678,7 +681,9 @@ function render(){
   updEl.textContent = updText;
   if (dotReady && updText) mountDot(updEl, [updText], [15,92,101], 150, 1);
 
-  document.getElementById("news").innerHTML = newsHtml();
+  const newsH = newsHtml();
+  document.getElementById("news").innerHTML = newsH;
+  const newsBuy = newsH.indexOf('class="buy"') >= 0;
 
   document.getElementById("cats").innerHTML = CATS.map(c =>
     '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
@@ -727,7 +732,7 @@ function render(){
     body.innerHTML = (past.length
       ? '<p class="empty">これから上がるものは<br>いまのところありません。</p>' + archiveHtml()
       : '<p class="empty">このカテゴリの値上げは、<br>いまのところありません。</p>') + ad;
-    if (pn) pn.hidden = !ad;
+    if (pn) pn.hidden = !(ad || newsBuy);
     return;
   }
 
@@ -778,7 +783,7 @@ function render(){
   body.innerHTML = html + ad + archiveHtml();
 
   /* 広告が1つでも出ているときだけ、上に説明を出す */
-  if (pn) pn.hidden = !(anyBuy || ad);
+  if (pn) pn.hidden = !(anyBuy || ad || newsBuy);
 }
 
 document.addEventListener("click", e => {
