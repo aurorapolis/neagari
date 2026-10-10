@@ -98,6 +98,53 @@
   }
   .nb-left { font-size:17px; letter-spacing:.06em; }
 
+  /* ── ねあがりニュース（広告ではない、ふつうのお知らせ欄） ── */
+  .news {
+    position:relative; margin:68px 0 0; background:#FFFDF6;
+    border:2px solid var(--ink); padding:28px 11px 10px;
+    box-shadow:3px 3px 0 rgba(42,38,34,.75);
+  }
+  /* 見出し：朱赤のハンコ。少し傾けて、ぺたっと押した感じ */
+  /* 見出し：朱赤のハンコ。少し傾けて、ぺたっと押した感じ */
+  .news-stamp {
+    position:absolute; left:-6px; top:-17px;
+    background:var(--red); color:#fff; font-size:16px; letter-spacing:.08em;
+    padding:4px 12px 5px; transform:rotate(-2.5deg);
+    box-shadow:
+      inset 0 0 0 1.5px var(--red),
+      inset 0 0 0 3px rgba(255,255,255,.9),
+      3px 3px 0 var(--ink);
+  }
+  /* 月ちゃんが枠の上から、ていねいにご案内 */
+  .news-by {
+    position:absolute; right:4px; bottom:100%; margin-bottom:-6px;
+    display:flex; align-items:flex-end; gap:10px; pointer-events:none;
+  }
+  .news-by img { width:46px; height:auto; image-rendering:pixelated; display:block; }
+  .news-bubble {
+    position:relative; margin-bottom:28px;
+    background:#fff; border:2px solid var(--ink); border-radius:16px;
+    padding:5px 11px 6px; font-size:11.5px; font-weight:800; line-height:1.45; color:var(--ink);
+    white-space:nowrap;
+  }
+  /* しっぽ：外側の黒い三角に、内側の白い三角を重ねる */
+  .news-bubble::before, .news-bubble::after {
+    content:""; position:absolute; top:55%; border-style:solid; border-color:transparent;
+  }
+  .news-bubble::before { right:-12px; margin-top:-7px; border-width:7px 0 7px 12px; border-left-color:var(--ink); }
+  .news-bubble::after  { right:-8.5px; margin-top:-5px; border-width:5px 0 5px 9px; border-left-color:#fff; }
+  .news-bubble b { color:var(--teal-d); }
+  .news-item + .news-item { border-top:1.5px dashed var(--line); margin-top:8px; padding-top:8px; }
+  .news-row { display:flex; align-items:center; gap:7px; }
+  .news-tag {
+    flex:none; background:var(--teal); color:#fff;
+    font-size:10.5px; font-weight:800; padding:1px 6px; letter-spacing:.04em;
+  }
+  .news-title { font-size:16px; line-height:1.3; color:var(--red); }
+  .news-body { display:block; font-size:12.5px; font-weight:600; line-height:1.6; margin-top:3px; }
+  .news-src { font-size:11.5px; font-weight:700; color:var(--sub); margin-left:4px; white-space:nowrap; }
+  .news-src a { color:var(--teal-d); margin-left:6px; }
+
   /* ── しぼりこみ ── */
   .cats {
     display:flex; gap:5px; flex-wrap:nowrap; margin:20px 0 26px;
@@ -336,6 +383,7 @@
   <div id="newbar"></div>
   <p class="adnote" id="ad-note" hidden><b class="min">おしらせ</b><span class="pr">広告</span> とついたボタンは、ただ楽天サイトへいくボタンです。<br>広告動画とかは流れません！ご安心を！</p>
 
+  <div id="news"></div>
   <div id="sale-line"></div>
   <div class="cats" id="cats"></div>
   <div id="body"><p class="empty">読みこんでいます…</p></div>
@@ -462,6 +510,8 @@ DOTREADY.then(() => { dotReady = true; paintDots(); }).catch(() => {});
 const CHARA_BAR = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAACACAYAAADu4Iw0AAADfklEQVR42u2dz4dWURjH75sZErUoRYqXN0q9M0REXloUaUhtWrVIP0S06Q/oj2gT0S+1aMhsJpGiFjEzRInpBy1iKBG16CXRonav7kPnuU/nOefeO/P57K57Z86Z+/V8v55zz73TKVrGru29302az9v3Hzo5x1tVQKtAMASDlHSaNiFrRr24uSZ4/t3rb6bxd06sD57fc+ZHrRlHhWGJgGAwYqzpE5QZtXqwGLz+59xk1vnEZhwVhiUCgsH/Z1jqtTnZh8SOlzqjcveV1j6NCsMSAcFgREd67OzM1ahfeOz4ede+JhbvtcRYYvs0KgxLBASDdBmmMZw/xV3/i4nD94Lndx86SYVhiYBgUDHDNLwzbtPmbtY/+OuJo6XjDXfvJx1v32CqdPzq8R3Tz5NhWCIgGPyTMe15jMw461qhZGHuYa2ZVXemUWFYIiAY+GWYdoH3nozcyExqW2ZRYVgiIBhUz7DUa4tfPi+VjuVaolx7S07u8agwLBEQDLL1Yan3eMQ+L2o68nlWb/pl8Pp1ty5TYVgiIBg4ZVgs1udn0vNlpo13B6Xj/o5tSTPQOp6c//fTF6PGl2u5VBiWCAgG1TMsdg+H5skSbS1TZkhqUo+n9V1UGJYICAbVMyz3N2zBdv+pMCwREAyq92FgI3btkArDEgHBoDKN/279g+548Pqt125knd/Hc2eD5/cfuBA8r60d0odhiYBgsHz6MGtGyT0VVrQ9Iep8lH2H1syiwrBEQDBob4bFovVxR5Z+JR3fumeDCsMSAcFg+WRYbF+Vejzr86/YPTNUGJYICAbt7cO8v7e4YLy+f/0RFQYIhmBAhhVFob8P9mnvwVbdUO+1QyoMSwQEg/b0YVpm1d0HWfF+344KwxIBwSBdhsV+135tf9J1Ps+eXgme1/bCS4ZvFkvHW54/ocIAwRAM6sH9/TCZYdbvF/aMe9OtmaWhZZrMMImWaezpwBIBwaC5fZg3MjNknxabWVoGWvs0uRbq3adRYVgiIBg0N8O0PsfaN3mvJXr3qbzjjCUCgkFzM2zjpdsr+gZ792VUGJYICAZ+GRa7h2OlY+3LqDAsERAMRpj3F9T9Ppf3vkUr1rVODeseECoMSwQEA78+LPc7yNZ3iLX5Wdf2hs5/r3WtkQrDEgHBIF0fBr7Qh2GJgGDgl2G5aXpm5v6/11QYlggIBiP+AHPZ/0NjFbaBAAAAAElFTkSuQmCC";
 /* 広告欄のねあがりちゃん（右手をあげて走るポーズ・26×31ドット） */
 const CHARA_AD = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAACA0lEQVR42rVWwUdEQRj/vfWWLHUoIsXyYtNuyxKRJSqWSF06JZtKRJekP6FzdYnYdmNlu9ShFSnqECuixNbGUpQ6ZTu0JDpsp3nezJuZN++1/U7z5s18v+/3fd/MNxpcIBwyak5rSuUnjTevuSW4zgQAAA93H+b/7p5mAEDv7JeQUFdVc50JoCFeBAB8F6LCNSyhEhEbKhGBbC9RpjktJF6y4IWOhVWZJlOwu/yNemBqrcEeusP9Le7i1rag1FhlcgwtuTwA4PFg0F51rAovRJXJMXNMyPrjI/Zi4Bkfn1gwx5eFY6mallyeUsQrcd3p8IVDRo31TgjJOp31XoTb06xy8mOJpPubIRwyajISfzCOSFenzZFYIkmFzufVQ4JIV6eSSp/XS9ItdPwjrEfHE9Hr/BwAoCOV5hZJLJGk5mOJpDeijlRaOYdSRbwGxzN2e5o154+CfgDA6PMPlBtfOGTU3vqGuRte1ldsc/3xEZNoYGiR+te0s8FXpNKuWVwWjhHZPrHNE5JS+Unjhk6kBgBl8OJ8U6rCejx0N2oaI1EbiROBsPHx1FgJRCSkEEQHXBepeV+dNsfG3g21iYSKDZ1VkfQKkuWmel9E9b7o+ZbwqeTmLwRUjmTnhqD96oz6/pxZkpZz3S5VWT7YNx1FxHpcb2heHvXEU6fcuu6wMkOqjfEXIyrPMpy2vTwAAAAASUVORK5CYII=";
+/* 月ちゃん（ニュース欄の案内役） */
+const CHARA_MOON = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABkCAYAAAALxleYAAAByUlEQVR42u3dO07DQBSF4RjRUbADikQC8aizChbGUlJQsorUiIIiBRuBOlPEGnked8z3d4kixzo6+n019iTTZjCe7re/OZ//+j5Nkc7/agOBCxzFaO63XAfPcTx+nL3e718XHa+28zWcUgSOyA7PdXTq4NakzudwSoHAB+K6trN7O1rDBQ6Bc/h6nL10rUXDKQUCH8nha5+zW9/z1HBKETh6zuHWRjRc4BB4XIfn3pP8OX1mfeHd9kXDIXCBo9EcPvrc3Xv9W8MFLnD0dPjoc3Xp58c1nFIgcIELHAIXOErM4aX3Tc5xc/t49vr5YXdxbm59PA2nFAh8JIenb9R2XurY3sdLr2H2aVIKBD6yw9P14rU9S9h7fVzDKUXgKOnwdO5svbYSjdpzuYZTisBRkGnOYf9tT8/cXL7U6RpOKQIHh8dxeq7jNZxSBI6WDk+p7fRcZ0b77VoNpxSBo6fDo83lo99jTc9fwylF4Ojp8GhzcHRnazilCBw9Hc7py5ydro9rOKUIHD0dXtrpo/3u4dLnVjScUgSOSA7PdXrK++EtlMNLP4ei4ZQicIzk8NKOn6P2vkt7fCgFAufwfteA1v+1puGUInA05A9dBY9fXu5/fAAAAABJRU5ErkJggg==";
 const CATS = ["すべて","食品","飲料","日用品","その他"];
 const WD = ["日","月","火","水","木","金","土"];
 let DATA = null, CAT = "すべて";
@@ -521,6 +571,38 @@ function buyHtml(r, k){
         '<a class="buy" href="' + esc(url) + '" target="_blank" rel="sponsored noopener">'
         + label + ' <small>' + name + '</small></a>').join("")
     + '<span class="pr">広告</span></span>';
+}
+
+/* ══ ねあがりニュース ══
+   data.json の "news" に書くと、一覧の上にお知らせとして出る（広告ではない）。
+   from〜to の期間中のものだけ出て、期間が終われば自動で消える。何もなければ欄ごと出ない。
+   "news": [ { "from":"…", "to":"…", "tag":"北海道", "head":"見出し", "body":"本文", "src":"出典", "url":"記事のURL" } ] */
+function pickNews(){
+  let list = DATA && DATA.news;
+  if (!list) return [];
+  if (!Array.isArray(list)) list = [list];
+  const now = new Date();
+  return list.filter(x => x && x.head &&
+    (!x.from || now >= new Date(x.from)) &&
+    (!x.to   || now <  new Date(x.to)));
+}
+function newsHtml(){
+  const list = pickNews();
+  if (!list.length) return "";
+  const br = t => esc(t).replace(/\n/g, "<br>");
+  return '<div class="news">'
+    + '<span class="news-stamp min">月ちゃんニュース</span>'
+    + '<span class="news-by"><span class="news-bubble"><b>ねあがりちゃん様</b>が走って<br>拾ってまいりました</span><img src="' + CHARA_MOON + '" alt=""></span>'
+    + list.map(x => '<div class="news-item">'
+        + '<div class="news-row">'
+        + (x.tag ? '<span class="news-tag">' + esc(x.tag) + '</span>' : "")
+        + '<span class="news-title min">' + br(x.head) + '</span></div>'
+        + '<span class="news-body">' + br(x.body || "")
+        + ((x.src || x.url) ? '<span class="news-src">' + esc(x.src || "")
+          + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noreferrer">記事 ▶</a>' : "")
+          + '</span>' : "")
+        + '</span></div>').join("")
+    + '</div>';
 }
 
 /* 広告欄。data.json に "ad" を書くとその内容に、なければ下の基本形になる。
@@ -595,6 +677,8 @@ function render(){
   updEl.dataset.text = updText;
   updEl.textContent = updText;
   if (dotReady && updText) mountDot(updEl, [updText], [15,92,101], 150, 1);
+
+  document.getElementById("news").innerHTML = newsHtml();
 
   document.getElementById("cats").innerHTML = CATS.map(c =>
     '<button class="cat' + (c === CAT ? " on" : "") + '" data-cat="' + c + '">' + c + '</button>'
